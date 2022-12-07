@@ -1,0 +1,486 @@
+<?xml version="1.0"?>
+<robot name="C:/Users/Shanaaz Ahamed/Documents/Webots/Maze 2/protos/Robot.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="base_link">
+  </link>
+  <joint name="linear_motor" type="prismatic">
+    <parent link="base_link"/>
+    <child link="solid(5)"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0.02 0.105" rpy="0 0 0"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <link name="solid(5)">
+    <visual>
+      <geometry>
+        <box size="0.05 0.05 0.005"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.05 0.05 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="appearance">
+  </link>
+  <joint name="solid(5)_appearance_joint" type="fixed">
+    <parent link="solid(5)"/>
+    <child link="appearance"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <joint name="j1" type="continuous">
+    <parent link="solid(5)"/>
+    <child link="solid"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1" velocity="10"/>
+    <origin xyz="0 0 0.01" rpy="0 0 0"/>
+  </joint>
+  <link name="solid">
+    <visual>
+      <origin xyz="0 0.02 0.0425" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.01 0.085"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.02 0.0425" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.01 0.085"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="appearance_0">
+  </link>
+  <joint name="solid_appearance_0_joint" type="fixed">
+    <parent link="solid"/>
+    <child link="appearance_0"/>
+    <origin xyz="0 0.02 0.0425" rpy="0 0 0"/>
+  </joint>
+  <joint name="j2" type="continuous">
+    <parent link="solid"/>
+    <child link="solid_1"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1" velocity="10"/>
+    <origin xyz="0 -0.015 0.04" rpy="0 0 0"/>
+  </joint>
+  <link name="solid_1">
+    <visual>
+      <origin xyz="0 -0.04 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.08 0.005 0.005"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.04 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.08 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="gripper_right">
+  </link>
+  <joint name="solid_1_gripper_right_joint" type="fixed">
+    <parent link="solid_1"/>
+    <child link="gripper_right"/>
+    <origin xyz="-0.015 -0.04 0.0025" rpy="3.141593 -1.570793 3.141593"/>
+  </joint>
+  <link name="gripper_left">
+  </link>
+  <joint name="solid_1_gripper_left_joint" type="fixed">
+    <parent link="solid_1"/>
+    <child link="gripper_left"/>
+    <origin xyz="0.015 0 0.0025" rpy="3.141593 -1.570793 3.141593"/>
+  </joint>
+  <link name="gripper_color_sensor">
+  </link>
+  <joint name="solid_1_gripper_color_sensor_joint" type="fixed">
+    <parent link="solid_1"/>
+    <child link="gripper_color_sensor"/>
+    <origin xyz="0 0.005 0" rpy="0 -1.570794 1.570796"/>
+  </joint>
+  <joint name="g_r" type="continuous">
+    <parent link="solid_1"/>
+    <child link="solid(3)"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1" velocity="10"/>
+    <origin xyz="-0.0375 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="solid(3)">
+    <visual>
+      <origin xyz="0 0.005 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.005 0.04"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.005 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.005 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="hingejoint" type="continuous">
+    <parent link="solid(3)"/>
+    <child link="right_g_strut"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0.005 0.04" rpy="0 0 0"/>
+  </joint>
+  <link name="right_g_strut">
+    <visual>
+      <origin xyz="0.0075 0.005 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.02 0.005 0.005"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0075 0.005 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.02 0.005 0.005"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.02 0.005 0.01" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.01 0.06"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.02 0.005 0.01" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.01 0.06"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Righ_inner" type="continuous">
+    <parent link="solid_1"/>
+    <child link="solid(2)"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="-0.0275 0.005 0" rpy="0 0 0"/>
+  </joint>
+  <link name="solid(2)">
+    <visual>
+      <origin xyz="0 0.005 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.005 0.04"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.005 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.005 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Left_inner" type="continuous">
+    <parent link="solid_1"/>
+    <child link="solid(1)"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0.0275 0.005 0.02" rpy="0 0 0"/>
+  </joint>
+  <link name="solid(1)">
+    <visual>
+      <origin xyz="0 0.005 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.005 0.04"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.005 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.005 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="g_l" type="continuous">
+    <parent link="solid_1"/>
+    <child link="solid_2"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1" velocity="10"/>
+    <origin xyz="0.0375 0.005 0.02" rpy="0 0 0"/>
+  </joint>
+  <link name="solid_2">
+    <visual>
+      <origin xyz="0 0.005 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.005 0.04"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.005 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.005 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="hingejoint_3" type="continuous">
+    <parent link="solid_2"/>
+    <child link="left_g_strut"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0.005 0.04" rpy="0 0 0"/>
+  </joint>
+  <link name="left_g_strut">
+    <visual>
+      <origin xyz="-0.0075 0.005 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.02 0.005 0.005"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.0075 0.005 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.02 0.005 0.005"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.02 0.005 0.01" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.01 0.06"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.02 0.005 0.01" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.005 0.01 0.06"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lidar_servo" type="continuous">
+    <parent link="base_link"/>
+    <child link="lidar"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1" velocity="20"/>
+    <origin xyz="0 -0.015 0.105" rpy="0 -1.57 0"/>
+  </joint>
+  <link name="lidar">
+  </link>
+  <link name="ir7">
+  </link>
+  <joint name="base_link_ir7_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="ir7"/>
+    <origin xyz="-0.023337 -0.02075 0.069955" rpy="-3.14 -0.000001 -1.570007"/>
+  </joint>
+  <link name="ir6">
+  </link>
+  <joint name="base_link_ir6_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="ir6"/>
+    <origin xyz="-0.023812 -0.02075 0.069962" rpy="-3.14 -0.000001 -1.570007"/>
+  </joint>
+  <link name="ir5">
+  </link>
+  <joint name="base_link_ir5_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="ir5"/>
+    <origin xyz="-0.014287 -0.02075 0.069977" rpy="-3.14 -0.000001 -1.570007"/>
+  </joint>
+  <link name="ir4">
+  </link>
+  <joint name="base_link_ir4_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="ir4"/>
+    <origin xyz="-0.004762 -0.02075 0.069992" rpy="-3.14 -0.000001 -1.570007"/>
+  </joint>
+  <link name="ir3">
+  </link>
+  <joint name="base_link_ir3_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="ir3"/>
+    <origin xyz="0.004762 -0.02075 0.070008" rpy="-3.14 -0.000001 -1.570007"/>
+  </joint>
+  <link name="ir2">
+  </link>
+  <joint name="base_link_ir2_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="ir2"/>
+    <origin xyz="0.014287 -0.02075 0.070023" rpy="-3.14 -0.000001 -1.570007"/>
+  </joint>
+  <link name="ir1">
+  </link>
+  <joint name="base_link_ir1_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="ir1"/>
+    <origin xyz="0.023812 -0.02075 0.070038" rpy="-3.14 -0.000001 -1.570007"/>
+  </joint>
+  <link name="ir0">
+  </link>
+  <joint name="base_link_ir0_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="ir0"/>
+    <origin xyz="0.033337 -0.02075 0.070053" rpy="-3.14 -0.000001 -1.570007"/>
+  </joint>
+  <link name="camera_right">
+  </link>
+  <joint name="base_link_camera_right_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_right"/>
+    <origin xyz="-0.05 -0.015 0.07" rpy="-4.712389 0.000001 -3.141593"/>
+  </joint>
+  <link name="camera_left">
+  </link>
+  <joint name="base_link_camera_left_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_left"/>
+    <origin xyz="0.05 -0.015 0.07" rpy="-4.712389 0.000001 -3.141593"/>
+  </joint>
+  <link name="camera_mid">
+  </link>
+  <joint name="base_link_camera_mid_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_mid"/>
+    <origin xyz="0 -0.015 0.11" rpy="-4.712389 0.000001 -3.141593"/>
+  </joint>
+  <link name="solid(4)">
+    <visual>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_link_solid(4)_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="solid(4)"/>
+    <origin xyz="0 -0.02 -0.075" rpy="0 0 0"/>
+  </joint>
+  <link name="solid(3)_4">
+    <visual>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_link_solid(3)_4_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="solid(3)_4"/>
+    <origin xyz="-0.075 -0.02 0.075" rpy="0 0 0"/>
+  </joint>
+  <link name="solid(2)_5">
+    <visual>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_link_solid(2)_5_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="solid(2)_5"/>
+    <origin xyz="0.075 -0.02 0.075" rpy="0 0 0"/>
+  </joint>
+  <joint name="rightMotor" type="continuous">
+    <parent link="base_link"/>
+    <child link="solid(1)_6"/>
+    <axis xyz="0.000796 -1 0"/>
+    <limit effort="10" velocity="10"/>
+    <origin xyz="-0.11 -0.01 0" rpy="0 0 1.57"/>
+  </joint>
+  <link name="solid(1)_6">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.03" length="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="leftMotor" type="continuous">
+    <parent link="base_link"/>
+    <child link="solid_7"/>
+    <axis xyz="0.000796 -1 0"/>
+    <limit effort="10" velocity="10"/>
+    <origin xyz="0.11 -0.01 0" rpy="0 0 1.57"/>
+  </joint>
+  <link name="solid_7">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.03" length="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="solid(7)">
+  </link>
+  <joint name="base_link_solid(7)_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="solid(7)"/>
+    <origin xyz="0 0.016 0" rpy="0 0 0"/>
+  </joint>
+  <link name="solid(6)">
+    <visual>
+      <origin xyz="0 0.058 0.026" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.25 0.005 0.15"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.058 0.026" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.25 0.005 0.15"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.08 0.058 -0.075" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.09 0.005 0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.08 0.058 -0.075" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.09 0.005 0.05"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.08 0.058 -0.075" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.09 0.005 0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.08 0.058 -0.075" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.09 0.005 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_link_solid(6)_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="solid(6)"/>
+    <origin xyz="0 0 0" rpy="3.141593 0 3.141593"/>
+  </joint>
+  <link name="appearance_8">
+  </link>
+  <joint name="solid(6)_appearance_8_joint" type="fixed">
+    <parent link="solid(6)"/>
+    <child link="appearance_8"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_9">
+  </link>
+  <joint name="base_link_appearance_9_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="appearance_9"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+</robot>
