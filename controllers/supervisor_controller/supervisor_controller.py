@@ -50,7 +50,7 @@ walletCapacity = 10000
 started = False
 
 def placeCollectible(currentTime):
-    if currentTime % 4992 == 0 and len(collectibles) < MAX_COLLECTIBLES:
+    if len(collectibles) < MAX_COLLECTIBLES:
         position = random.sample(list(positions), 1)
         positions.remove(position[0])
         collectibleDef = "collectible" + str(currentTime)
@@ -139,6 +139,9 @@ def customTimestep():
     global RATE_CHANGE_TIME
 
     currentTime += timestep
+    
+    if currentTime == 300000:
+        started = True
 
     if started:
         gameTime += timestep
