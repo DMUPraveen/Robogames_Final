@@ -31,6 +31,8 @@ def positionofwalls(robot):
     for i in range(8):
         if list1[i]==True:
             dict1[i]=10/(prox_sensors[i].getValue()-70)
+        else:
+            dict1[i]=-1
     print(dict1)
 
 while robot.step(timestep) != -1:
