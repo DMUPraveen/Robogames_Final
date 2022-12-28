@@ -21,3 +21,4 @@ while robot.step(timestep) != -1:
         print(json.loads(receiver.getData().decode('utf-8')))
         receiver.nextPacket()
     pass
+    

@@ -10,62 +10,16 @@ IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R20
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.08191501423537068 -0.9829864020403672 -0.16440092410492277 5.34486565203979
-  position -4.784039369089186 -0.8573962148658436 5.830685887047786
+  orientation 0.01313912191964453 -0.9997527497945635 -0.017938861541064083 5.018400331575377
+  position -2.7582803382183094 -0.5102664317615639 7.4295376739820345
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-Solid {
-  scale 2 2 2
-  children [
-    Shape {
-      appearance Appearance {
-        material Material {
-        }
-        texture ImageTexture {
-          url [
-            "soil.jpg"
-          ]
-        }
-      }
-      geometry IndexedFaceSet {
-        coord Coordinate {
-          point [
-            -1 -1 0
-            1 -1 0
-            -1 1 0
-            1 1 0
-          ]
-        }
-        texCoord TextureCoordinate {
-          point [
-            0 0
-            4 0
-            0 4
-            4 4
-          ]
-        }
-        coordIndex [
-          2, 0, 1, 3, -1
-        ]
-        texCoordIndex [
-          2, 0, 1, 3, -1
-        ]
-      }
-    }
-  ]
-  name "floor"
-  model "floor"
-  boundingObject Plane {
-    size 2 2
-  }
-  locked TRUE
-}
 DEF dave E-puck {
-  translation -2.0876 -0.0154828 0.00077919
-  rotation -0.017500292496227962 0.00778225666312549 -0.9998165712988435 0
+  translation -2.07568 -0.0922562 0.00077919
+  rotation 0 0 1 -5.307179586466759e-06
   name "Dave"
   controller "dave_controller"
 }
@@ -565,36 +519,6 @@ Wall {
   }
 }
 Wall {
-  translation -1.28 -0.03 -7.18022e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(278)"
-  size 0.16 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.88 -0.26 -8.25961e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(416)"
-  size 0.16 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -1.7 0.2 -6.10084e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(276)"
@@ -730,21 +654,6 @@ Wall {
   }
 }
 Wall {
-  translation -0.16 0.88 -2.90972e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(254)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -0.42 0.89 -2.86279e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(260)"
@@ -778,21 +687,6 @@ Wall {
   translation -1.07 1.37 -6.10168e-07
   rotation 1 0 0 4.692820414042842e-06
   name "wall(326)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.94 1.17 -1.54875e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(333)"
   size 0.1 0.02 0.1
   appearance Appearance {
     material Material {
@@ -985,36 +879,6 @@ Wall {
   }
 }
 Wall {
-  translation 1.24 1.03 -2.20567e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(64)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 1.24 1.17 -1.54865e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(341)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 1.63 0.93 -2.67497e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(216)"
@@ -1075,22 +939,7 @@ Wall {
   }
 }
 Wall {
-  translation 0.78 1.84 1.59557e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(227)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.69 1.84 1.59557e-06
+  translation 0.74 1.84 1.59557e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(401)"
   size 0.2 0.02 0.1
@@ -1105,7 +954,7 @@ Wall {
   }
 }
 Wall {
-  translation 0.69 1.7 9.38554e-07
+  translation 0.74 1.7 9.38554e-07
   rotation 1 0 0 4.692820414042842e-06
   name "wall(402)"
   size 0.2 0.02 0.1
@@ -1165,54 +1014,9 @@ Wall {
   }
 }
 Wall {
-  translation 0.71 0.32 -5.53765e-06
-  rotation 0.7546688555575023 -2.5500495119243123e-07 0.6561058744223104 6.21834e-06
-  name "wall(382)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 0.58 0.32 -5.53765e-06
   rotation 0.7546688555575023 -2.5500495119243123e-07 0.6561058744223104 6.21834e-06
   name "wall(385)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.77 -0.0299995 -7.1802e-06
-  rotation 0.7546688555575023 -2.5500495119243123e-07 0.6561058744223104 6.21834e-06
-  name "wall(237)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.82 -0.0299995 -7.1802e-06
-  rotation 0.7546688555575023 -2.5500495119243123e-07 0.6561058744223104 6.21834e-06
-  name "wall(379)"
   size 0.15 0.02 0.1
   appearance Appearance {
     material Material {
@@ -1244,36 +1048,6 @@ Wall {
   rotation 0.7546688555575023 -2.5500495119243123e-07 0.6561058744223104 6.21834e-06
   name "wall(384)"
   size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.69 0.15 -6.33546e-06
-  rotation 0.7546688555575023 -2.5500495119243123e-07 0.6561058744223104 6.21834e-06
-  name "wall(383)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.58 -0.199999 -7.97801e-06
-  rotation 0.7546688555575023 -2.5500495119243123e-07 0.6561058744223104 6.21834e-06
-  name "wall(238)"
-  size 0.21 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -1345,21 +1119,6 @@ Wall {
   }
 }
 Wall {
-  translation 0.82 1.41 -4.22326e-07
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(405)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 1.07 0.12 -6.4763e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(209)"
@@ -1390,40 +1149,10 @@ Wall {
   }
 }
 Wall {
-  translation 1.45 -0.24 -8.16578e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(377)"
-  size 0.17 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 1.07 0.63 -4.08287e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(212)"
   size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 1.38 0.63 -4.08287e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(343)"
-  size 0.2 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -1540,70 +1269,10 @@ Wall {
   }
 }
 Wall {
-  translation 0.72 0.48 -4.78681e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(381)"
-  size 0.34 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 0.21 0.09 -6.61708e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(8)"
   size 0.6 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.7 -0.35 -8.68198e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(147)"
-  size 0.27 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.76 -0.35 -8.68198e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(380)"
-  size 0.27 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.48 -0.67 -1.01836e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(92)"
-  size 0.3 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -1645,7 +1314,7 @@ Wall {
   }
 }
 Wall {
-  translation -0.22 -0.48 -9.29202e-06
+  translation -0.3 -0.5 -9.38588e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(315)"
   size 0.15 0.02 0.1
@@ -1795,51 +1464,6 @@ Wall {
   }
 }
 Wall {
-  translation -0.63 -1.59 -1.44992e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(287)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.21 -1.41 -1.36549e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(290)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.11 -1.41 -1.36549e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(362)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 0.28 -1.35 -1.33735e-05
   rotation 1 0 0 4.692820414042842e-06
   name "wall(364)"
@@ -1945,51 +1569,6 @@ Wall {
   }
 }
 Wall {
-  translation -1.52 -1.77 -1.53434e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(281)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.26 -1.77 -1.53434e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(282)"
-  size 0.09 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.55 -1.47 -1.39355e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(283)"
-  size 0.09 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -1.6 -1.56 0
   rotation 0 0 1 1.5708
   name "wall(280)"
@@ -2039,21 +1618,6 @@ Wall {
   rotation 1 0 0 4.6928012867022945e-06
   name "wall(193)"
   size 0.28 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.87 -0.78 -1.07002e-05
-  rotation 1 0 0 4.6928012867022945e-06
-  name "wall(194)"
-  size 0.25 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -2144,21 +1708,6 @@ Wall {
   rotation 1 0 0 4.692820414042842e-06
   name "wall(82)"
   size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 1.36 -0.4 -8.91658e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(149)"
-  size 0.35 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -2275,39 +1824,9 @@ Wall {
   }
 }
 Wall {
-  translation -0.14 0.44 -4.97453e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(74)"
-  size 0.3 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 0.06 0.22 -6.00699e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(75)"
-  size 0.35 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0 0.22 -6.00699e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(308)"
   size 0.35 0.02 0.1
   appearance Appearance {
     material Material {
@@ -2339,21 +1858,6 @@ Wall {
   rotation 1 0 0 4.692820414042842e-06
   name "wall(307)"
   size 0.3 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.09 -0.01 -7.08638e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(96)"
-  size 0.4 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -2429,21 +1933,6 @@ Wall {
   rotation 1 0 0 4.692820414042842e-06
   name "wall(175)"
   size 0.3 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.79 -0.65 -1.00905e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(177)"
-  size 0.13 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -2593,21 +2082,6 @@ Wall {
   translation 1.24 -0.72 -1.04168e-05
   rotation 1 0 0 4.692820414042842e-06
   name "wall(204)"
-  size 0.14 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 1.32 -0.72 -1.04168e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(388)"
   size 0.14 0.02 0.1
   appearance Appearance {
     material Material {
@@ -2770,39 +2244,9 @@ Wall {
   }
 }
 Wall {
-  translation 1.67 -1.10113e-13 -7.03641e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(376)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 1.85 -0.12 -7.59955e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(355)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 1.85 0.25 -5.86314e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(356)"
   size 0.1 0.02 0.1
   appearance Appearance {
     material Material {
@@ -2819,21 +2263,6 @@ Wall {
   rotation 1 0 0 4.692820414042842e-06
   name "wall(354)"
   size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.71 -0.73 -1.04653e-05
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(179)"
-  size 0.19 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -2864,21 +2293,6 @@ Wall {
   rotation 1 0 0 4.692820414042842e-06
   name "wall(164)"
   size 0.13 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.95 -0.24 -8.16577e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(125)"
-  size 0.1 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -2923,21 +2337,6 @@ Wall {
   translation -1.46 -0.16 -7.79033e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(106)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.63 -0.16 -7.79033e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(417)"
   size 0.2 0.02 0.1
   appearance Appearance {
     material Material {
@@ -3028,21 +2427,6 @@ Wall {
   translation 1.28 -0.03 -7.18024e-06
   rotation 1 0 0 4.692820414042842e-06
   name "wall(375)"
-  size 0.32 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 1.36 -0.03 -7.18024e-06
-  rotation 1 0 0 4.692820414042842e-06
-  name "wall(378)"
   size 0.32 0.02 0.1
   appearance Appearance {
     material Material {
@@ -3171,20 +2555,6 @@ Wall {
   translation 0.37 -1.02 0
   name "wall(67)"
   size 1.3 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.75 1.56 0
-  name "wall(28)"
-  size 0.5 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -3345,21 +2715,6 @@ Wall {
   }
 }
 Wall {
-  translation 1.29 -1.71 0
-  rotation 0 0 1 1.5708
-  name "wall(139)"
-  size 0.36 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 1 -1.84 0
   rotation 0 0 1 1.5708
   name "wall(350)"
@@ -3495,7 +2850,7 @@ Wall {
   }
 }
 Wall {
-  translation 0.330004 -1.45 0
+  translation 0.330004 -1.41 0
   rotation 0 0 1 1.5708
   name "wall(131)"
   size 0.5 0.02 0.1
@@ -3555,22 +2910,7 @@ Wall {
   }
 }
 Wall {
-  translation -0.290001 0.21 0
-  rotation 0 0 1 1.5708
-  name "wall(104)"
-  size 0.47 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.290001 0.36 0
+  translation -0.260001 0.36 0
   rotation 0 0 1 1.5708
   name "wall(397)"
   size 0.47 0.02 0.1
@@ -3585,24 +2925,9 @@ Wall {
   }
 }
 Wall {
-  translation 0.239999 0.44 0
+  translation 0.219999 0.44 0
   rotation 0 0 1 1.5708
   name "wall(240)"
-  size 0.45 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.119999 0.66 0
-  rotation 0 0 1 1.5708
-  name "wall(309)"
   size 0.45 0.02 0.1
   appearance Appearance {
     material Material {
@@ -3645,36 +2970,6 @@ Wall {
   }
 }
 Wall {
-  translation -1.24 0.34 0
-  rotation 0 0 1 1.5708
-  name "wall(273)"
-  size 0.36 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.85 -0.58 0
-  rotation 0 0 1 1.5708
-  name "wall(176)"
-  size 0.45 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 1.49 0.25 0
   rotation 0 0 1 1.5708
   name "wall(83)"
@@ -3705,7 +3000,7 @@ Wall {
   }
 }
 Wall {
-  translation 0.89 -0.00999976 0
+  translation 0.85 -0.00999992 0
   rotation 0 0 1 1.5708
   name "wall(85)"
   size 1 0.02 0.1
@@ -3930,40 +3225,10 @@ Wall {
   }
 }
 Wall {
-  translation -1.48 0.099997 0
-  rotation 0 0 1 1.5708
-  name "wall(304)"
-  size 0.29 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -0.5 -0.500003 0
   rotation 0 0 1 1.5708
   name "wall(66)"
   size 0.7 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.7 -1.6 0
-  rotation 0 0 1 1.5708
-  name "wall(122)"
-  size 0.55 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -4260,21 +3525,6 @@ Wall {
   }
 }
 Wall {
-  translation 0.359998 1.82 0
-  rotation 0 0 1 1.5708
-  name "wall(399)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 0.389998 1.35 0
   rotation 0 0 1 1.5708
   name "wall(247)"
@@ -4339,21 +3589,6 @@ Wall {
   rotation 0 0 1 1.5708
   name "wall(102)"
   size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.589998 1.7 0
-  rotation 0 0 1 1.5708
-  name "wall(54)"
-  size 0.3 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -4545,81 +3780,6 @@ Wall {
   }
 }
 Wall {
-  translation 0.89 1.8 0
-  rotation 0 0 1 1.5708
-  name "wall(403)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.89 1.37 0
-  rotation 0 0 1 1.5708
-  name "wall(404)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.78 1.27 0
-  rotation 0 0 1 1.5708
-  name "wall(406)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.66 1.04 0
-  rotation 0 0 1 1.5708
-  name "wall(407)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.82 1.05 0
-  rotation 0 0 1 1.5708
-  name "wall(408)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -1.73 1.77 0
   rotation 0 0 1 1.5708
   name "wall(262)"
@@ -4725,21 +3885,6 @@ Wall {
   }
 }
 Wall {
-  translation -0.9 1.24 0
-  rotation 0 0 1 1.5708
-  name "wall(325)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -0.46 1.59 0
   rotation 0 0 1 1.5708
   name "wall(360)"
@@ -4758,36 +3903,6 @@ Wall {
   translation -0.62 1.5 0
   rotation 0 0 1 1.5708
   name "wall(329)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.72 1.58 0
-  rotation 0 0 1 1.5708
-  name "wall(330)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.7 1.91 0
-  rotation 0 0 1 1.5708
-  name "wall(328)"
   size 0.15 0.02 0.1
   appearance Appearance {
     material Material {
@@ -4860,66 +3975,6 @@ Wall {
   }
 }
 Wall {
-  translation 1 -0.89 0
-  rotation 0 0 1 1.5708
-  name "wall(90)"
-  size 0.25 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.34 -0.74 0
-  rotation 0 0 1 1.5708
-  name "wall(93)"
-  size 0.3 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.45 -1.88 0
-  rotation 0 0 1 1.5708
-  name "wall(158)"
-  size 0.23 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 0.64 -0.92 0
-  rotation 0 0 1 1.5708
-  name "wall(94)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 0.64 -1.09 0
   rotation 0 0 1 1.5708
   name "wall(195)"
@@ -4938,21 +3993,6 @@ Wall {
   translation -0.27 -0.93 0
   rotation 0 0 1 1.5708
   name "wall(124)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.7 -1.07 0
-  rotation 0 0 1 1.5708
-  name "wall(154)"
   size 0.2 0.02 0.1
   appearance Appearance {
     material Material {
@@ -5138,22 +4178,6 @@ Wall {
   }
 }
 Wall {
-  translation 0.72 -0.4 0
-  rotation 0 0 1 1.5708
-  name "wall(366)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 0.2 -1.56 0
   rotation 0 0 1 1.5708
   name "wall(296)"
@@ -5234,22 +4258,6 @@ Wall {
   }
 }
 Wall {
-  translation 1.63 -1.9 0
-  rotation 0 0 1 1.5708
-  name "wall(392)"
-  size 0.13 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 1.82 -1.94 0
   rotation 0 0 1 1.5708
   name "wall(352)"
@@ -5269,22 +4277,6 @@ Wall {
   translation 1.82 -1.93 0
   rotation 0 0 1 1.5708
   name "wall(393)"
-  size 0.13 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 1.82 -1.9 0
-  rotation 0 0 1 1.5708
-  name "wall(394)"
   size 0.13 0.02 0.1
   appearance Appearance {
     material Material {
@@ -5437,36 +4429,6 @@ Wall {
   }
 }
 Wall {
-  translation 1.53 -1.39 0
-  rotation 0 0 1 1.5708
-  name "wall(200)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation 1.53 -1.49 0
-  rotation 0 0 1 1.5708
-  name "wall(347)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 1.87 0.68 0
   rotation 0 0 1 1.5708
   name "wall(207)"
@@ -5557,21 +4519,6 @@ Wall {
   }
 }
 Wall {
-  translation 1.15 1.1 0
-  rotation 0 0 1 1.5708
-  name "wall(214)"
-  size 0.15 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation 0.84 0.68 0
   rotation 0 0 1 1.5708
   name "wall(235)"
@@ -5632,21 +4579,6 @@ Wall {
   }
 }
 Wall {
-  translation -0.82 -1.79 0
-  rotation 0 0 1 1.5708
-  name "wall(159)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -0.42 -1.68 0
   rotation 0 0 1 1.5708
   name "wall(143)"
@@ -5692,21 +4624,6 @@ Wall {
   }
 }
 Wall {
-  translation -1.62 -1 0
-  rotation 0 0 1 1.5708
-  name "wall(162)"
-  size 0.6 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -1.87 0.83 0
   rotation 0 0 1 1.5708
   name "wall(271)"
@@ -5737,39 +4654,9 @@ Wall {
   }
 }
 Wall {
-  translation -1.71 0.15 0
-  rotation 0 0 1 1.5708
-  name "wall(421)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -1.87 -5.87712e-07 0
   rotation 0 0 1 1.5708
   name "wall(422)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.87 0.0399994 0
-  rotation 0 0 1 1.5708
-  name "wall(423)"
   size 0.1 0.02 0.1
   appearance Appearance {
     material Material {
@@ -5812,21 +4699,6 @@ Wall {
   }
 }
 Wall {
-  translation -1.47 -0.21 0
-  rotation 0 0 1 1.5708
-  name "wall(306)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -1.88 0.29 0
   rotation 0 0 1 1.5708
   name "wall(251)"
@@ -5842,55 +4714,10 @@ Wall {
   }
 }
 Wall {
-  translation -0.95 -0.56 0
-  rotation 0 0 1 1.5708
-  name "wall(170)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -1.09 -0.2 0
   rotation 0 0 1 1.5708
   name "wall(387)"
   size 0.09 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.03 0.33 0
-  rotation 0 0 1 1.5708
-  name "wall(299)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -0.94 0.13 0
-  rotation 0 0 1 1.5708
-  name "wall(277)"
-  size 0.1 0.02 0.1
   appearance Appearance {
     material Material {
     }
@@ -5932,51 +4759,6 @@ Wall {
   }
 }
 Wall {
-  translation -1.52 0.46 0
-  rotation 0 0 1 1.5708
-  name "wall(313)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.24 0.13 0
-  rotation 0 0 1 1.5708
-  name "wall(303)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.09 0.02 0
-  rotation 0 0 1 1.5708
-  name "wall(302)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -0.95 -1.16 0
   rotation 0 0 1 1.5708
   name "wall(172)"
@@ -5992,39 +4774,9 @@ Wall {
   }
 }
 Wall {
-  translation -0.95 -0.94 0
-  rotation 0 0 1 1.5708
-  name "wall(173)"
-  size 0.1 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
   translation -1.09 -0.79 0
   rotation 0 0 1 1.5708
   name "wall(123)"
-  size 0.2 0.02 0.1
-  appearance Appearance {
-    material Material {
-    }
-    texture ImageTexture {
-      url [
-        "brick3.jpg"
-      ]
-    }
-  }
-}
-Wall {
-  translation -1.23 -0.79 0
-  rotation 0 0 1 1.5708
-  name "wall(285)"
   size 0.2 0.02 0.1
   appearance Appearance {
     material Material {
@@ -6605,4 +5357,50 @@ Robot {
   name "supervisor"
   controller "supervisor_controller"
   supervisor TRUE
+}
+Solid {
+  scale 2 2 2
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+        }
+        texture ImageTexture {
+          url [
+            "soil.jpg"
+          ]
+        }
+      }
+      geometry IndexedFaceSet {
+        coord Coordinate {
+          point [
+            -1 -1 0
+            1 -1 0
+            -1 1 0
+            1 1 0
+          ]
+        }
+        texCoord TextureCoordinate {
+          point [
+            0 0
+            4 0
+            0 4
+            4 4
+          ]
+        }
+        coordIndex [
+          2, 0, 1, 3, -1
+        ]
+        texCoordIndex [
+          2, 0, 1, 3, -1
+        ]
+      }
+    }
+  ]
+  name "floor"
+  model "floor"
+  boundingObject Plane {
+    size 2 2
+  }
+  locked TRUE
 }
