@@ -25,7 +25,7 @@ def positionofwalls(robot):
     #for i in range(8):
             #print("i: {},val: {}".format(i,prox_sensors[i].getValue()),end=" ")
             #print()
-    list1=[prox_sensors[i].getValue()>=70 for i in range(8)]
+    list1=[prox_sensors[i].getValue()>70 for i in range(8)]
     dict1={}
     #print(list1)
     for i in range(8):
