@@ -3,7 +3,7 @@ from Graphic_Engine import Graphic_Engine,calculate_origin
 from grid import Grid 
 from Resource_manager import res_man
 from dave_lib import Dave,update_dave_pose
-from communicater import get_packets_and_update
+from communicater import get_packets_and_update,update_epuck
 
 res = res_man()
 vis = Graphic_Engine(None,(0,0))
@@ -22,5 +22,7 @@ def visulizer():
 
 while res.robot.step(res.timestep) != -1:
     get_packets_and_update(res.receiver,update_on_receive)
+    update_epuck(dave,res) 
     print(dave.orientation)
+    print(dave.wall_dis)
     vis.run(visulizer)

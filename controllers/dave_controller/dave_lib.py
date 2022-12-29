@@ -1,4 +1,4 @@
-
+NO_WALL = -1
 class Dave:
     def __init__(self):
         self.x = 0
@@ -6,6 +6,7 @@ class Dave:
         self.orientation = 0
         self.left_v = 0
         self.right_v = 0
+        self.wall_dis = [NO_WALL]*8
     
 
     def set_velcoity(self,left_v,righ_v):

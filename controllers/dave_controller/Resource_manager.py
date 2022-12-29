@@ -17,3 +17,8 @@ class res_man:
         self.right.setPosition(float("inf"))
         self.left.setVelocity(0.0)
         self.right.setVelocity(0.0)
+        self.prox_sensors=[]
+        for i in range(8):
+            sensor_name="ps"+str(i)
+            self.prox_sensors.append(self.robot.getDevice(sensor_name))
+            self.prox_sensors[i].enable(self.timestep)
