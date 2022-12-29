@@ -10,15 +10,15 @@ IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R20
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.01313912191964453 -0.9997527497945635 -0.017938861541064083 5.018400331575377
-  position -2.7582803382183094 -0.5102664317615639 7.4295376739820345
+  orientation 0.003766631262964586 -0.9999806324716914 -0.004954510111509819 4.982367475993284
+  position -2.691128458858319 0.028965559361947207 1.9555173833825146
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 DEF dave E-puck {
-  translation -2.07568 -0.0922562 0.00077919
+  translation -2.17568 -0.0922552 0.00077919
   rotation 0 0 1 -5.307179586466759e-06
   name "Dave"
   controller "dave_controller"
