@@ -20,9 +20,8 @@ update_on_receive = [update_dave_on_packet]
 def visulizer():
     vis.draw_grid(grid)
 
+dave.set_velcoity(0.1,-0.1)
 while res.robot.step(res.timestep) != -1:
     get_packets_and_update(res.receiver,update_on_receive)
     update_epuck(dave,res) 
-    print(dave.orientation)
-    print(dave.wall_dis)
     vis.run(visulizer)
