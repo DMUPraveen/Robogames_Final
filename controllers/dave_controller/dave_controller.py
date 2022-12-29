@@ -1,49 +1,26 @@
-from controller import Robot
-from controller import Receiver
-import json
+import pygame
+from Graphic_Engine import Graphic_Engine,calculate_origin
+from grid import Grid 
+from Resource_manager import res_man
+from dave_lib import Dave,update_dave_pose
+from communicater import get_packets_and_update
 
-robot = Robot()
-timestep = int(robot.getBasicTimeStep())
-receiver = robot.getDevice("receiver")
-receiver.enable(10)
+res = res_man()
+vis = Graphic_Engine(None,(0,0))
+gg = [[0]*10 for _ in range(10)]
+grid = Grid(gg)
 
-left = robot.getDevice('left wheel motor')
-right = robot.getDevice('right wheel motor')
+dave  = Dave()
 
-left.setPosition(float("inf"))
-right.setPosition(float("inf"))
+vis.initialize(400,400)
+vis.origin = calculate_origin(vis.screen,10,10)
 
-left.setVelocity(0.0)
-right.setVelocity(0.0)
+update_dave_on_packet = lambda packet: update_dave_pose(packet,dave)
+update_on_receive = [update_dave_on_packet]
+def visulizer():
+    vis.draw_grid(grid)
 
-
-
-
-
-
-class Dave:
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.orientation = 0
-        self.left_v = 0
-        self.right_v = 0
-    
-
-    def set_velcoity(self,left_v,righ_v):
-        self.left_v = left_v
-        self.right_v = righ_v
-    
-
-
-def update_dave_pose(packet,dave:Dave):
-    dave.orientation = packet["robotAngleDegrees"]
-    dave.x = packet["robot"][0]
-    dave.y = packet["robot"][1]
-    
-while robot.step(timestep) != -1:
-    while receiver.getQueueLength() > 0:
-        print(json.loads(receiver.getData().decode('utf-8')))
-        receiver.nextPacket()
-    pass
-    
+while res.robot.step(res.timestep) != -1:
+    get_packets_and_update(res.receiver,update_on_receive)
+    print(dave.orientation)
+    vis.run(visulizer)
