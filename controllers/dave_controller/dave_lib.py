@@ -10,9 +10,12 @@ class Dave:
         self.right_v = 0
         self.wall_dis = [NO_WALL]*8
 
+
     def set_velcoity(self, left_v, righ_v):
         self.left_v = left_v
         self.right_v = righ_v
+
+
 
 
 def pretty_print_sensor_data(dave: Dave):
