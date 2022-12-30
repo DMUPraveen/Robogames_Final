@@ -1,6 +1,6 @@
 import pygame
 from typing import Dict,Tuple
-CELL_SIZE = 15 
+CELL_SIZE =  10
 UNVISITED_CELL_COLOR = (255,255,255)
 VISITED_CELL_COLOR = (0,0,255)
 BACKGROUND_COLOR = (255,255,255)

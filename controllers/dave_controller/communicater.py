@@ -4,12 +4,16 @@ from dave_lib import Dave,NO_WALL
 from Resource_manager import res_man
 def get_packets_and_update(receiver,update_on_receive):
     packet = None
+    
     while receiver.getQueueLength() > 0:
         packet = json.loads(receiver.getData().decode('utf-8'))
+        # print(packet)
         receiver.nextPacket()
     if(packet is not None):
         for func in update_on_receive:
             func(packet)
+        return True
+    return False
 
 SCALING_FACTOR = 10
 THRESHOLD = 75 
@@ -29,5 +33,3 @@ def update_epuck(dave:Dave,res:res_man):
     res.right.setVelocity(dave.right_v)
     dave.wall_dis = positionofwalls(res.prox_sensors)
 
-
-    

@@ -107,3 +107,5 @@ class Grid:
         self.grid[i][j] |=  data << (VISITED+1) 
     def get_additional_data(self,i,j):
         return self.grid[i][j] >> (VISITED+1)
+    def set_wall_directly(self,i,j,direction):
+        self.grid[i][j] |= 1 << direction
