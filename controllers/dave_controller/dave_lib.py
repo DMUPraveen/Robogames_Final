@@ -1,6 +1,6 @@
 from math import radians
 from math import pi as PI
-from geometry import clamp_radian, rotate_2d_vector, get_rotation_matrix_2d
+from geometry import clamp_radian, rotate_2d_vector, get_rotation_matrix_2d, theta_rotated_unit_vector
 import numpy as np
 
 NO_WALL = float('inf')
@@ -69,6 +69,9 @@ class Dave:
     def get_sensor_unit_vectors(self):
         rotation_matrix = get_rotation_matrix_2d(self.orientation)
         return [rotation_matrix@sensor_unit_vector for sensor_unit_vector in SENSOR_UNIT_VECTORS]
+
+    def get_front_facing_vector(self):
+        return theta_rotated_unit_vector(self.orientation)
 
 
 class Environment:

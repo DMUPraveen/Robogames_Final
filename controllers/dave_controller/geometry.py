@@ -11,18 +11,25 @@ def theta_rotated_unit_vector(theta_radians: float):
         np.cos(theta_radians),
         np.sin(theta_radians)
     ]
-    )
+    ).reshape((2, -1))
 
 
 def get_rotation_matrix_2d(theta_radians):
     return np.array(
-        [np.cos(theta_radians), -np.sin(theta_radians)],
-        [np.sin(theta_radians), np.cos(theta_radians)]
+        [
+            [np.cos(theta_radians), -np.sin(theta_radians)],
+            [np.sin(theta_radians), np.cos(theta_radians)]
+        ]
     )
 
 
 def rotate_2d_vector(vecto_2d: np.ndarray, theta_radians):
-    return get_rotation_matrix_2d(theta_radians)@vecto_2d.reshape((-1, 2))
+    rotation_matrix = get_rotation_matrix_2d(theta_radians)
+    return rotation_matrix@vecto_2d.reshape((2, -1))
+
+
+def x_unit_vector():
+    return np.array([[1.0], [0.0]])
 
 
 def round_angle(theta):
