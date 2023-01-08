@@ -3,6 +3,14 @@ from math import pi
 import numpy as np
 
 
+def column_vector_to_flat_array(column_vector_pos_2d):
+    return tuple(column_vector_pos_2d.flatten())
+
+
+def flat_array_to_column_vector(flat_position_2d):
+    return np.array(flat_position_2d).reshape(2, -1)
+
+
 def theta_rotated_unit_vector(theta_radians: float):
     '''
         returns [cos(theta),sin(theta)]

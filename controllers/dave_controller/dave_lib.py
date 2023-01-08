@@ -73,6 +73,9 @@ class Dave:
     def get_front_facing_vector(self):
         return theta_rotated_unit_vector(self.orientation)
 
+    def get_distances(self):
+        return self.wall_dis
+
 
 class Environment:
     def __init__(self):

@@ -3,6 +3,7 @@ import pygame
 from typing import Iterable, Callable, Any, Optional, Tuple
 from dave_lib import Dave
 import numpy as np
+from geometry import column_vector_to_flat_array, flat_array_to_column_vector
 
 
 class Graphic_Engine:
@@ -46,11 +47,11 @@ SENSOR_SCALE = 2
 
 
 def column_vector_to_pygame_position(column_vector_pos_2d: np.ndarray):
-    return tuple(column_vector_pos_2d.flatten())
+    return column_vector_to_flat_array(column_vector_pos_2d)
 
 
 def pygame_position_to_2d_column_vecotor(position):
-    return np.array(position).reshape(2, -1)
+    return flat_array_to_column_vector(position)
 
 
 def draw_dave(screen: pygame.Surface, robot: Dave, radius: int, position_x: int, position_y: int):
