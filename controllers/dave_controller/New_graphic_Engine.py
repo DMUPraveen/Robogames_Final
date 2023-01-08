@@ -4,6 +4,7 @@ from typing import Iterable, Callable, Any, Optional, Tuple
 from dave_lib import Dave
 import numpy as np
 from geometry import column_vector_to_flat_array, flat_array_to_column_vector
+from Occupancy_grid import Occupancy_Grid
 
 
 class Graphic_Engine:
@@ -66,7 +67,53 @@ def draw_dave(screen: pygame.Surface, robot: Dave, radius: int, position_x: int,
         sensor_col = ACTIVATED_SENSOR_COLOR if(
             dis < ACTIVATION_COLOR_THRESHOL) else SENSOR_COLOR
         pygame.draw.line(screen, sensor_col, position, intger_sensor_pos)
-    print(robot.get_front_facing_vector())
+    # print(robot.get_front_facing_vector())
     front_pos = column_vector_to_pygame_position(
         robot.get_front_facing_vector()*radius+pygame_position_to_2d_column_vecotor(position))
     pygame.draw.line(screen, FRONT_LINE_COLOR, position, front_pos)
+
+
+VISITED_COLOR = (0, 0, 255)
+BLOCKED_COLOR = (255, 0, 0)
+UNVISITED_COLOR = (255, 255, 255)
+VALUE_TO_COLOR_MAP = {
+    0: UNVISITED_COLOR,
+    1: BLOCKED_COLOR,
+    2: VISITED_COLOR
+}
+CELL_OUTLINE_COLOR = (0, 0, 0)
+
+
+def draw_grid_view(screen: pygame.Surface, grid_view: np.ndarray, cell_size: int, start: Tuple[int, int]):
+    def get_corner(i, j): return (cell_size*i+start[0], cell_size*j+start[1])
+    def get_color(val): return VALUE_TO_COLOR_MAP[val]
+    for row_index, row in enumerate(grid_view):
+        for column_index, value in enumerate(row):
+
+            pygame.draw.rect(
+                screen,
+                get_color(value),
+                (get_corner(row_index, column_index), (cell_size, cell_size)),
+            )
+
+            pygame.draw.rect(
+                screen,
+                CELL_OUTLINE_COLOR,
+                (get_corner(row_index, column_index), (cell_size, cell_size)),
+                width=1
+            )
+
+
+def tracking_grid_view(grid_pos: Tuple[int, int], occupancy_grid: Occupancy_Grid, window_size: int) -> np.ndarray:
+    '''
+    Returns a grid view such that the grid_pos provided is always in the middle in a window of size window_size
+    '''
+    row = grid_pos[0]
+    column = grid_pos[1]
+
+    min_row = max((row - window_size//2), 0)
+    max_row = min((row+window_size//2), occupancy_grid.height-1)
+    min_column = max((column-window_size//2), 0)
+    max_column = min((column+window_size//2), occupancy_grid.width-1)
+
+    return occupancy_grid.grid[min_row:max_row, min_column:max_column]

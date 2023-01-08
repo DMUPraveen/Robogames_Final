@@ -32,16 +32,18 @@ class Occupancy_Grid:
         )
 
     def set_obstacle(self, row, column):
+        print(f"obstacle @{row,column}")
         self.grid[row, column] = 1
 
     def set_visited(self, row, column):
+        print(f"visited @{row,column}")
         self.grid[row, column] = 2
 
 
 DistanceSensorToWallDistance = Callable[[float], Tuple[bool, float]]
 
 
-class Map:
+class Mapper:
     def __init__(self, occupancy_grid: Occupancy_Grid, cart_to_grid_pos: Cartesian_to_Grid, obstacle_cell_determiner: DistanceSensorToWallDistance, raymarching_delta):
         self.occupancy_grid = occupancy_grid
         self.cart_to_grid_pos = cart_to_grid_pos
@@ -64,8 +66,17 @@ class Map:
             row, column = obstacle_grid_position
             if(is_wall):
                 self.occupancy_grid.set_obstacle(row, column)
-                return
 
-            self.occupancy_grid.set_visited(row, column)
+            else:
+                self.occupancy_grid.set_visited(row, column)
 
         self.occupancy_grid.set_visited(*current_grid_position)
+
+
+def get_threshold_based_obstacle_distance_determiner(threshold: float, constant_offset: float) -> DistanceSensorToWallDistance:
+    def threshold_based_distance_determiner(distance: float):
+        if(distance > threshold):
+            return (False, 0)
+        return (True, constant_offset)
+
+    return threshold_based_distance_determiner
