@@ -1,25 +1,53 @@
-from dave_lib import Dave
 from numpy import arctan2, deg2rad, array
 from math import pi
+import numpy as np
+
+
+def theta_rotated_unit_vector(theta_radians: float):
+    '''
+        returns [cos(theta),sin(theta)]
+    '''
+    return np.array([
+        np.cos(theta_radians),
+        np.sin(theta_radians)
+    ]
+    )
+
+
+def get_rotation_matrix_2d(theta_radians):
+    return np.array(
+        [np.cos(theta_radians), -np.sin(theta_radians)],
+        [np.sin(theta_radians), np.cos(theta_radians)]
+    )
+
+
+def rotate_2d_vector(vecto_2d: np.ndarray, theta_radians):
+    return get_rotation_matrix_2d(theta_radians)@vecto_2d.reshape((-1, 2))
+
 
 def round_angle(theta):
     '''
     converts an angle to the range 0,360 in degrees
     '''
-    return (theta%360.0)
+    return (theta % 360.0)
+
 
 def clamp_radian(theta):
     '''
     clamps an angle given in radians to be between 0 and 2pi
-    
+
     '''
-    return theta% (2*pi)
+    return theta % (2*pi)
+
+
 def convert_angle_radians(angle):
     angle = clamp_radian(angle)
     if(angle < pi):
         return angle
-    
+
     return angle-2*pi
+
+
 def convert_angle(theta):
     '''
      Function to convert angles to range in -PI to PI
@@ -48,8 +76,8 @@ class Rel_Cord:
         self.set = True
 
     def get_cart(self, x, y):
-        prx,pry =  (x - self.s_x, y-self.s_y)
-        return (-pry,prx)
+        prx, pry = (x - self.s_x, y-self.s_y)
+        return (-pry, prx)
 
     def get_ori(self, ori):
         return round_angle(ori - self.s_o)
@@ -62,7 +90,5 @@ class Grid_Pos():
         self.scaling_factor = sf
 
     def grid_pos(self, x, y):
-        print("In grid pos", x,y)
+        print("In grid pos", x, y)
         return (int(x/self.scaling_factor) + self.o_j, -int(y/self.scaling_factor) + self.o_i)
-
-

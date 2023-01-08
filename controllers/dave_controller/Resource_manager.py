@@ -1,5 +1,5 @@
 from controller import Robot
-from controller import Motor
+from controller import Motor,Receiver
 
 
 class res_man:
@@ -7,11 +7,16 @@ class res_man:
         self.robot = Robot()
         self.timestep = int(self.robot.getBasicTimeStep())
 
-        self.receiver = self.robot.getDevice("receiver")
+
+        self.keyboard = self.robot.getKeyboard()
+        self.keyboard.enable(self.timestep)
+
+        self.receiver:Receiver = self.robot.getDevice("receiver")
         self.receiver.enable(10)
         
         self.left:Motor = self.robot.getDevice('left wheel motor')
         self.right:Motor = self.robot.getDevice('right wheel motor')
+        
 
         self.left.setPosition(float("inf"))
         self.right.setPosition(float("inf"))
