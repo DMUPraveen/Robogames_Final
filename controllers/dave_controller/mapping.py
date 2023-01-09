@@ -1,27 +1,8 @@
 
-from dave_lib import Dave
+from dave_lib import Dave,sensor_orientations
 from math import pi
 from geometry import clamp_radian, convert_angle_radians, Rel_Cord, Grid_Pos
 from grid import NORTH, SOUTH, EAST, WEST, Grid
-_RAW_SENSOR_POSITIONS = [
-    1.27,
-    0.77,
-    0.00,
-    5.21,
-    4.21,
-    3.1459,
-    2.37,
-    1.87,
-    4.71239,
-]
-
-SENSOR_ORIENTATIONS = [
-    (val - pi/2) % (2*pi) for val in _RAW_SENSOR_POSITIONS
-]
-
-
-def sensor_orientations(dave_orientation):
-    return (clamp_radian(angle+dave_orientation) for angle in SENSOR_ORIENTATIONS)
 
 
 ANGLE_RANGE = (-pi/4, pi/4)
