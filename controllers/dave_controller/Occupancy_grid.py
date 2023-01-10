@@ -32,11 +32,11 @@ class Occupancy_Grid:
         )
 
     def set_obstacle(self, row, column):
-        print(f"obstacle @{row,column}")
+        # print(f"obstacle @{row,column}")
         self.grid[row, column] = 1
 
     def set_visited(self, row, column):
-        print(f"visited @{row,column}")
+        # print(f"visited @{row,column}")
         self.grid[row, column] = 2
 
 
@@ -80,3 +80,5 @@ def get_threshold_based_obstacle_distance_determiner(threshold: float, constant_
         return (True, constant_offset)
 
     return threshold_based_distance_determiner
+
+

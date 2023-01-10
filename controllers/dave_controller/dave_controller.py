@@ -77,6 +77,6 @@ while res.robot.step(res.timestep) != -1:
     control_dave_via_keyboard(res.keyboard, dave)
     mapper.update_map(dave)
     vis.run(all_visualizations)
-    print(dave.get_distances())
+    print(dave.get_distances()[0])
     # print(dave)
 ######################################################################################
