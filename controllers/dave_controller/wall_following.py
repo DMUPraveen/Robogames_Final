@@ -4,7 +4,7 @@ import numpy as np
 DISTANCE_TO_PS5 = 0.031
 DISTANCE_TO_PS6 = 0.033
 AVERAGE_RADIUS = np.mean([DISTANCE_TO_PS5, DISTANCE_TO_PS6])
-V=3 #maximum velocity
+V = 3  # maximum velocity
 
 
 def simple_left_wall_following(dave):
@@ -26,9 +26,11 @@ def simple_left_wall_following(dave):
         else:
             dave.simple_forward(6.28)
 
-#sensor_1=sensors 5 or 2
-#sensor_2=sensors 6 or 1
-def calculate_angle_wall_following(dave,sensor_1,sensor_2):
+# sensor_1=sensors 5 or 2
+# sensor_2=sensors 6 or 1
+
+
+def calculate_angle_wall_following(dave, sensor_1, sensor_2):
     wall_distance_from_sensor1 = dave.wall_dis[sensor_1]+DISTANCE_TO_PS5
     wall_distance_from_sensor2 = dave.wall_dis[sensor_2]+DISTANCE_TO_PS6
     v5 = wall_distance_from_sensor1*SENSOR_UNIT_VECTORS[sensor_1]
@@ -38,7 +40,7 @@ def calculate_angle_wall_following(dave,sensor_1,sensor_2):
     return(angle)
 
 
-def calculate_perpendicular_distance_wall_following(dave,sensor_1,sensor_2):
+def calculate_perpendicular_distance_wall_following(dave, sensor_1, sensor_2):
     wall_distance_from_sensor1 = dave.wall_dis[sensor_1]+DISTANCE_TO_PS5
     wall_distance_from_sensor2 = dave.wall_dis[sensor_2]+DISTANCE_TO_PS6
     v5 = wall_distance_from_sensor1*SENSOR_UNIT_VECTORS[sensor_1]
@@ -51,21 +53,24 @@ def calculate_perpendicular_distance_wall_following(dave,sensor_1,sensor_2):
     perpendicular_distance = np.linalg.norm(perpendicular_distance_vector)
     return(perpendicular_distance-AVERAGE_RADIUS)
 
-def defining_equation(dave: Dave,sensor_1,sensor_2):
+
+def defining_equation(dave: Dave, sensor_1, sensor_2):
     if dave.wall_dis[sensor_1] <= 100 and dave.wall_dis[sensor_2] <= 100:
         alpha = 2
         beta = -1
         gamma = 3
-        n_angle = calculate_angle_wall_following(dave,sensor_1,sensor_2)/np.pi*2
+        n_angle = calculate_angle_wall_following(
+            dave, sensor_1, sensor_2)/np.pi*2
         n_distance = calculate_perpendicular_distance_wall_following(
-            dave,sensor_1,sensor_2)/0.07
+            dave, sensor_1, sensor_2)/0.07
         error = alpha*n_angle + beta*n_distance
         omega = gamma*error
         print(f"{n_angle=} {n_distance=} {error=} {omega=}")
-        return omega
+        return omega[0]
     if dave.wall_dis[sensor_1] > 100 and dave.wall_dis[sensor_2] > 100:
         return -V
     return 0
+
 
 def going_towards_a_corner(dave):
     if dave.wall_dis[0] <= 0.06 and dave.wall_dis[1] <= 0.06 and dave.wall_dis[7] <= 0.06 and dave.wall_dis[6] <= 0.06:
@@ -76,19 +81,20 @@ def going_towards_a_corner(dave):
         return True
     return False
 
+
 def attempt2_left_wall_following(dave: Dave):
     if going_towards_a_corner(dave):
         dave.simple_turn_right(V)
     else:
-        omega=defining_equation(dave,5,6)
+        omega = defining_equation(dave, 5, 6)
         lv = V+omega
         rv = V-omega
+
         dave.set_velcoity(lv, rv)
 
-    
+
 def attempt2_right_wall_following(dave: Dave):
-    omega=defining_equation(dave,2,1)
+    omega = defining_equation(dave, 2, 1)
     lv = V+omega
     rv = V-omega
     dave.set_velcoity(lv, rv)
-
