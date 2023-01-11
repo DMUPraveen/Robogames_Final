@@ -4,6 +4,7 @@ import numpy as np
 DISTANCE_TO_PS5 = 0.031
 DISTANCE_TO_PS6 = 0.033
 AVERAGE_RADIUS = np.mean([DISTANCE_TO_PS5, DISTANCE_TO_PS6])
+V=3 #maximum velocity
 
 
 def simple_left_wall_following(dave):
@@ -25,22 +26,23 @@ def simple_left_wall_following(dave):
         else:
             dave.simple_forward(6.28)
 
-
-def calculate_angle_left_wall_following(dave):
-    wall_distance_from_sensor5 = dave.wall_dis[5]+DISTANCE_TO_PS5
-    wall_distance_from_sensor6 = dave.wall_dis[6]+DISTANCE_TO_PS6
-    v5 = wall_distance_from_sensor5*SENSOR_UNIT_VECTORS[5]
-    v6 = wall_distance_from_sensor6*SENSOR_UNIT_VECTORS[6]
+#sensor_1=sensors 5 or 2
+#sensor_2=sensors 6 or 1
+def calculate_angle_wall_following(dave,sensor_1,sensor_2):
+    wall_distance_from_sensor1 = dave.wall_dis[sensor_1]+DISTANCE_TO_PS5
+    wall_distance_from_sensor2 = dave.wall_dis[sensor_2]+DISTANCE_TO_PS6
+    v5 = wall_distance_from_sensor1*SENSOR_UNIT_VECTORS[sensor_1]
+    v6 = wall_distance_from_sensor2*SENSOR_UNIT_VECTORS[sensor_2]
     difference = v6-v5
     angle = -np.arctan2(difference[1], difference[0])
     return(angle)
 
 
-def calculate_perpendicular_distance_left_wall_following(dave):
-    wall_distance_from_sensor5 = dave.wall_dis[5]+DISTANCE_TO_PS5
-    wall_distance_from_sensor6 = dave.wall_dis[6]+DISTANCE_TO_PS6
-    v5 = wall_distance_from_sensor5*SENSOR_UNIT_VECTORS[5]
-    v6 = wall_distance_from_sensor6*SENSOR_UNIT_VECTORS[6]
+def calculate_perpendicular_distance_wall_following(dave,sensor_1,sensor_2):
+    wall_distance_from_sensor1 = dave.wall_dis[sensor_1]+DISTANCE_TO_PS5
+    wall_distance_from_sensor2 = dave.wall_dis[sensor_2]+DISTANCE_TO_PS6
+    v5 = wall_distance_from_sensor1*SENSOR_UNIT_VECTORS[sensor_1]
+    v6 = wall_distance_from_sensor2*SENSOR_UNIT_VECTORS[sensor_2]
     dot_product_v5_v6 = np.dot(v5.flatten(), v6.flatten())
     lamba = (np.linalg.norm(v5)**2-dot_product_v5_v6) / \
         (np.linalg.norm(v6)**2-dot_product_v5_v6)
@@ -49,22 +51,44 @@ def calculate_perpendicular_distance_left_wall_following(dave):
     perpendicular_distance = np.linalg.norm(perpendicular_distance_vector)
     return(perpendicular_distance-AVERAGE_RADIUS)
 
-
-def attempt2_left_wall_following(dave: Dave):
-    if dave.wall_dis[5] <= 100 and dave.wall_dis[6] <= 100:
-        alpha = 1
+def defining_equation(dave: Dave,sensor_1,sensor_2):
+    if dave.wall_dis[sensor_1] <= 100 and dave.wall_dis[sensor_2] <= 100:
+        alpha = 2
         beta = -1
-        gamma = 1
-        n_angle = calculate_angle_left_wall_following(dave)/np.pi*2
-        n_distance = calculate_perpendicular_distance_left_wall_following(
-            dave)/0.07
+        gamma = 3
+        n_angle = calculate_angle_wall_following(dave,sensor_1,sensor_2)/np.pi*2
+        n_distance = calculate_perpendicular_distance_wall_following(
+            dave,sensor_1,sensor_2)/0.07
         error = alpha*n_angle + beta*n_distance
         omega = gamma*error
-        v = 2
-        lv = v+omega
-        rv = v-omega
-        dave.set_velcoity(lv, rv)
         print(f"{n_angle=} {n_distance=} {error=} {omega=}")
+        return omega
+    if dave.wall_dis[sensor_1] > 100 and dave.wall_dis[sensor_2] > 100:
+        return -V
+    return 0
 
+def going_towards_a_corner(dave):
+    if dave.wall_dis[0] <= 0.06 and dave.wall_dis[1] <= 0.06 and dave.wall_dis[7] <= 0.06 and dave.wall_dis[6] <= 0.06:
+        return True
+    if dave.wall_dis[0] <= 0.06 and dave.wall_dis[1] <= 0.06 and dave.wall_dis[7] <= 0.06:
+        return True
+    if dave.wall_dis[0] <= 0.06 and dave.wall_dis[7] <= 0.06 and dave.wall_dis[6] <= 0.06:
+        return True
+    return False
+
+def attempt2_left_wall_following(dave: Dave):
+    if going_towards_a_corner(dave):
+        dave.simple_turn_right(V)
     else:
-        dave.simple_turn_left(6.28)
+        omega=defining_equation(dave,5,6)
+        lv = V+omega
+        rv = V-omega
+        dave.set_velcoity(lv, rv)
+
+    
+def attempt2_right_wall_following(dave: Dave):
+    omega=defining_equation(dave,2,1)
+    lv = V+omega
+    rv = V-omega
+    dave.set_velcoity(lv, rv)
+
