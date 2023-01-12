@@ -105,5 +105,12 @@ class Grid_Pos():
         self.scaling_factor = sf
 
     def grid_pos(self, x, y):
-        print("In grid pos", x, y)
+        # print("In grid pos", x, y)
         return (int(x/self.scaling_factor) + self.o_j, -int(y/self.scaling_factor) + self.o_i)
+
+    def grid_pos_float(self, x, y):
+        '''
+        returns the scaled and transformed x,y to scale and origin of the grid without transfomring the values
+        '''
+
+        return ((x/self.scaling_factor) + self.o_j, -(y/self.scaling_factor) + self.o_i)
