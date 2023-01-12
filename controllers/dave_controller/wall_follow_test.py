@@ -7,7 +7,7 @@ from communicater import get_packets_and_update, update_epuck
 from remote_control import control_dave_via_keyboard
 from New_graphic_Engine import Graphic_Engine, draw_dave, draw_grid_view, tracking_grid_view
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_threshold_based_obstacle_distance_determiner
-from wall_following import attempt2_left_wall_following
+from wall_following import attempt2_left_wall_following, attempt2_right_wall_following
 
 
 def main():
@@ -69,13 +69,13 @@ def main():
 
     ############################## Main Loop #############################################
     while res.robot.step(res.timestep) != -1:
-        print(dave)
-        print(dave.left_v, dave.right_v)
+        # print(dave)
+        # print(dave.left_v, dave.right_v)
         packet_recieved = get_packets_and_update(
             res.receiver, update_on_receive)
         update_epuck(dave, res)
         mapper.update_map(dave)
         vis.run(all_visualizations)
-        attempt2_left_wall_following(dave)
+        attempt2_right_wall_following(dave)
     # print(dave)
 ######################################################################################
