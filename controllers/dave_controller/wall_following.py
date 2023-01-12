@@ -57,19 +57,21 @@ def calculate_perpendicular_distance_wall_following(dave, sensor_1, sensor_2):
 def defining_equation(dave: Dave, sensor_1, sensor_2):
     if dave.wall_dis[sensor_1] <= 100 and dave.wall_dis[sensor_2] <= 100:
         alpha = 2
-        beta = -1
-        gamma = 3
+        beta = -0.2
+        alpha, beta = alpha/(alpha+beta), beta / \
+            (alpha+beta)  # normalize alpha and beta
+        gamma = 9
         n_angle = calculate_angle_wall_following(
             dave, sensor_1, sensor_2)/np.pi*2
         n_distance = calculate_perpendicular_distance_wall_following(
             dave, sensor_1, sensor_2)/0.07
-        error = alpha*n_angle + beta*n_distance
+        error = alpha*n_angle - beta*n_distance
         omega = gamma*error
         print(f"{n_angle=} {n_distance=} {error=} {omega=}")
         return omega[0]
     if dave.wall_dis[sensor_1] > 100 and dave.wall_dis[sensor_2] > 100:
         return -V
-    return 0
+    return -1
 
 
 def going_towards_a_corner(dave):
@@ -82,8 +84,17 @@ def going_towards_a_corner(dave):
     return False
 
 
+LEFT_FRONT_WALL_DETECTION_THRESHOLD = 0.02
+
+
+def left_front_wall_detected(dave: Dave):
+    if dave.wall_dis[7] <= LEFT_FRONT_WALL_DETECTION_THRESHOLD:
+        return True
+    return False
+
+
 def attempt2_left_wall_following(dave: Dave):
-    if going_towards_a_corner(dave):
+    if left_front_wall_detected(dave):
         dave.simple_turn_right(V)
     else:
         omega = defining_equation(dave, 5, 6)
