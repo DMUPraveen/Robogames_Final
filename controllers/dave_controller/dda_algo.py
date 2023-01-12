@@ -5,7 +5,8 @@ import numpy as np
 def perform_dda(direction_vector: Tuple[float, float],
                 start_scaled_to_grid_units: Tuple[float, float],
                 stopping_condition: Callable[[int, int], bool],
-                on_new_cell: Callable[[int, int], None]) -> None:
+                on_new_cell: Callable[[int, int], None],
+                maxdistnace: float) -> None:
     np_dir_vec = np.array(direction_vector)
     dir_unit_vec = np_dir_vec/np.linalg.norm(np_dir_vec)
     # distance traveled along the direction for one unit in x
@@ -31,3 +32,8 @@ def perform_dda(direction_vector: Tuple[float, float],
     else:
         step[1] = 1
         y_ray_length = ((current_tile[1]+1)-start_scaled_to_grid_units[1])*Sy
+
+    stop_flag = False
+    distance: float = 0.0
+    while(not stop_flag):
+        pass
