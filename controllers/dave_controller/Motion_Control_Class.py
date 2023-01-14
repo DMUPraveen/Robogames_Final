@@ -43,10 +43,11 @@ class PID:
 
 class Motion_Control:
     def __init__(self, timestep_in_ms: int):
-        self.pd_rotate = PID(0.05, 0.000001, timestep_in_ms)
-        self.pd_linear = PID(0.8, 0.01, timestep_in_ms)
+        self.pd_rotate = PID(1, 0, timestep_in_ms)
+        self.pd_linear = PID(12, 0.01, timestep_in_ms)
         self.target_position = np.array([0.0, 0.0])
-        self.w_max = 6.28
+        self.w_max = 6.00
+        self.rotate_max = 4.0
 
     def set_target(self, x: float, y: float):
         self.target_position = np.array([x, y])
@@ -75,12 +76,11 @@ class Motion_Control:
     #     else:
     #         return False
 
-    def go_to_position(self, dave: Dave, first_turn_threshold, angle_threshold: float, linear_threshold: float):
+    def go_to_position(self, dave: Dave, first_turn_threshold, linear_threshold: float):
         '''
         will go to position with rotating first most of the way first and then starting the linear motion
 
         first_turn_threshold: threshold of the error in angle to start the linear motion (Until this is reached linear motion will not start)
-        angle_threshold: threshold in the error in angle that is tolerated
         linear_threshold: threshold in the error in the linear distance that is tolerated
         '''
 
@@ -90,7 +90,7 @@ class Motion_Control:
         distance_error = float(np.linalg.norm(target_vector))
         target_direction_unit_vector = target_vector/distance_error
 
-        current_direction_unit_vector = dave.get_front_facing_vector()
+        current_direction_unit_vector = dave.get_front_facing_vector().flatten()
 
         orientation_error_magintude = np.arccos(
             np.dot(target_direction_unit_vector, current_direction_unit_vector)
@@ -108,14 +108,30 @@ class Motion_Control:
         linear_control_signal = self.pd_linear.control(distance_error)
 
         # setting the required omega
-        wheels_rotate_term = rotate_control_signal*self.w_max
+        wheels_rotate_term = rotate_control_signal*self.rotate_max
         wheels_linear_term = 0
 
+        absoulte_error = abs(self.pd_linear.get_error())
         # setting the required_linear_velocity
-        if(self.pd_rotate.get_error() < first_turn_threshold):
+        if(abs(self.pd_rotate.get_error()) < first_turn_threshold):
             # only start linear motion if this is met
-            wheels_linear_term = linear_control_signal*self.w_max
-
-        left_wheel_velocity = wheels_linear_term+wheels_rotate_term
-        right_wheel_velocity = wheels_linear_term-wheels_rotate_term
+            wheels_linear_term = -linear_control_signal*self.w_max
+            if(absoulte_error < linear_threshold):  # avoding small vector errors
+                wheels_rotate_term = 0
+        left_wheel_velocity = wheels_linear_term-wheels_rotate_term
+        right_wheel_velocity = wheels_linear_term+wheels_rotate_term
         dave.set_velcoity(left_wheel_velocity, right_wheel_velocity)
+
+        # print(f"{current_direction_unit_vector=}")
+        # print(f"{target_direction_unit_vector=}")
+        # print(f"{orientation_error}")
+        print(f"{self.pd_rotate.get_error()=}")
+        print(f"{wheels_rotate_term=}")
+        print(f"{left_wheel_velocity=}, {right_wheel_velocity=}")
+        # print(f"{self.pd_linear.get_error()=}")
+        print("******************************")
+
+        if(absoulte_error < linear_threshold):
+            return True
+
+        return False

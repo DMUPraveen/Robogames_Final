@@ -4,7 +4,7 @@ import pygame
 from Resource_manager import res_man
 from dave_lib import Dave, update_dave_pose, update_environment, Environment
 from communicater import get_packets_and_update, update_epuck
-from remote_control import control_dave_via_keyboard
+from remote_control import control_dave_via_keyboard, actions
 from New_graphic_Engine import Graphic_Engine, draw_dave, draw_grid_view, tracking_grid_view
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_obstacle_determiner
 from Motion_Control_Class import Motion_Control
@@ -68,14 +68,17 @@ def main():
     ######################################################################################
 
     ############################## Main Loop #############################################
+    motion_controller.set_target(-1.921, -0.170)
     while res.robot.step(res.timestep) != -1:
         packet_recieved = get_packets_and_update(
             res.receiver, update_on_receive)
         update_epuck(dave, res)
         mapper.update_map(dave)
         vis.run(all_visualizations)
-        print(dave)
-        control_dave_via_keyboard(res.keyboard, dave)
+        # print(dave)
+        if(motion_controller.go_to_position(dave, 0.1, 0.001)):
+            print("target reached")
+        # control_dave_via_keyboard(res.keyboard, dave)
         # print(dave.get_distances()[0])
         # print(dave)
     ######################################################################################
