@@ -7,8 +7,8 @@ from dave_lib import Dave
 class Cartesian_to_Grid:
     def __init__(self, scale: float, origin_cell_row: int = 0, origin_cell_column: int = 0) -> None:
         self.scale = scale
-        self.o_r: int = origin_cell_row
-        self.o_c: int = origin_cell_column
+        self.o_r: int = origin_cell_row  # basically the y=0 position
+        self.o_c: int = origin_cell_column  # basically the x=0 position
 
     def __call__(self, position_x, position_y):
         return self.catesian_to_grid_position(position_x, position_y)
@@ -20,6 +20,17 @@ class Cartesian_to_Grid:
         row = int(position_y / self.scale) + self.o_r
         column = int(position_x / self.scale) + self.o_c
         return (row, column)
+
+    def scale_xy_to_grid_scale(self, position_x: float, position_y: float) -> Tuple[float, float]:
+        '''
+        scales and translates provided x and y values to the grid origin please note the following:
+            1. This function does not convert to integer domain
+            2. This function only scales and transforms relatice to the scale and origin of the grid itself
+        '''
+        return (
+            position_x/self.scale+self.o_c,
+            position_y/self.scale+self.o_r
+        )
 
 
 class Occupancy_Grid:
