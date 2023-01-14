@@ -27,13 +27,15 @@ class Point_Follow:
         if(len(self.path_points) == 0):
             return
         self.state = Point_Follow_States.FOLLOWING
-        self.motion_controller.set_target(*self.path_points[0])
+        self.motion_controller.set_target(*self.path_points.popleft())
 
     def run(self, dave: Dave,):
+
         if(self.state != Point_Follow_States.FOLLOWING):
+            return
+        if not(self.motion_controller.go_to_position(dave, self.first_turn_threshold, self.linear_threshold)):
             return
         if(len(self.path_points) == 0):
             self.state = Point_Follow_States.FINISHED
-        if not(self.motion_controller.go_to_position(dave, self.first_turn_threshold, self.linear_threshold)):
             return
-        self.path_points.popleft()
+        self.motion_controller.set_target(*self.path_points.popleft())
