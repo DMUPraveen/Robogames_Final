@@ -83,41 +83,6 @@ class Mapper:
 
         self.occupancy_grid.set_visited(*current_grid_position)
 
-    def mappinf_version_2(self, dave: Dave, ray_casting_distance):
-        current_grid_position = self.cart_to_grid_pos(dave.x, dave.y)
-        current_colum_vector_2d = flat_array_to_column_vector((dave.x, dave.y))
-        for distance, sensor_unit_vector in zip(dave.get_distances(), dave.get_sensor_unit_vectors()):
-            is_wall, offset = self.obstacle_cell_determiner(distance)
-            obstacle_grid_position = None
-
-            def calculate_offset_vector_func(
-                offset): return offset * sensor_unit_vector + current_colum_vector_2d
-            def get_offset_grid_position(offset_column_vector): return self.cart_to_grid_pos(
-                *column_vector_to_flat_array(offset_column_vector))
-            while (obstacle_grid_position is None) or (obstacle_grid_position == current_grid_position):
-                obstacle_position_column_vector_2d = calculate_offset_vector_func(
-                    offset)
-                obstacle_grid_position = get_offset_grid_position(
-                    obstacle_position_column_vector_2d)
-                offset += self.raymarching_delta
-            row, column = obstacle_grid_position
-            if(is_wall):
-                self.occupancy_grid.set_obstacle(row, column)
-
-            else:
-                self.occupancy_grid.set_visited(row, column)
-            casted_distance = 0
-            casted_position = current_colum_vector_2d.copy()
-            while(casted_distance < ray_casting_distance):
-                casted_distance += self.raymarching_delta
-                casted_position = get_offset_grid_position(casted_distance)
-                casted_grid_position = get_offset_grid_position(
-                    casted_position)
-                if(casted_grid_position == obstacle_grid_position):
-                    break
-
-        self.occupancy_grid.set_visited(*current_grid_position)
-
 
 def get_threshold_based_obstacle_distance_determiner(threshold: float, constant_offset: float) -> DistanceSensorToWallDistance:
     def threshold_based_distance_determiner(distance: float):
