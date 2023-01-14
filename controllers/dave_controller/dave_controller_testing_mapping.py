@@ -5,7 +5,7 @@ from dave_lib import Dave, update_dave_pose, update_environment, Environment
 from communicater import get_packets_and_update, update_epuck
 from remote_control import control_dave_via_keyboard
 from New_graphic_Engine import Graphic_Engine, draw_dave, draw_grid_view, tracking_grid_view
-from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_obstacle_determiner
+from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_obstacle_determiner, get_true_distance_with_maximum_free_distance
 
 
 def main():
@@ -20,7 +20,8 @@ def main():
         OCCUPANCY_GRID_WIDTH, OCCUPANCY_GRID_HEIGHT)
     cart_to_grid_pos_converter = Cartesian_to_Grid(
         OCCUPANCY_GRID_SCALE, OCCUPANCY_GRID_WIDTH//2, OCCUPANCY_GRID_HEIGHT//2)
-    obstacle_cell_determiner = get_true_distance_obstacle_determiner(0.6)
+    obstacle_cell_determiner = get_true_distance_with_maximum_free_distance(
+        0.06, 0.02)
     mapper = Mapper(occupancy_grid, cart_to_grid_pos_converter,
                     obstacle_cell_determiner, 0.001)
     #######################################################################################
@@ -70,7 +71,7 @@ def main():
             res.receiver, update_on_receive)
         update_epuck(dave, res)
         control_dave_via_keyboard(res.keyboard, dave)
-        mapper.update_map(dave)
+        mapper.mapping_with_dda(dave)
         vis.run(all_visualizations)
         # print(dave.get_distances()[0])
         # print(dave)

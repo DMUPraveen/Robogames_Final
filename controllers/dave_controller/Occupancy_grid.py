@@ -34,6 +34,12 @@ class Cartesian_to_Grid:
             position_y/self.scale+self.o_r
         )
 
+    def scale_lengths(self, length_in_meters: float):
+        '''
+        converts lengths to grid_scale lengths 
+        '''
+        return length_in_meters/self.scale
+
 
 class Occupancy_Grid:
     def __init__(self, width: int, height: int,):
@@ -103,15 +109,16 @@ class Mapper:
             return
         self.occupancy_grid.set_visited(row, column)
 
-    def mapping_with_dda(self, dave: Dave, max_free_distance_threshold: float):
+    def mapping_with_dda(self, dave: Dave):
         current_position_grid = self.cart_to_grid_pos(
             dave.x, dave.y)  # a grid position (row,column)
         current_scaled_position_cartesian = self.cart_to_grid_pos.scale_xy_to_grid_scale(
             dave.x, dave.y)
         for distance, sensor_unit_vector in zip(dave.get_distances(), dave.get_sensor_unit_vectors()):
             is_wall, offset = self.obstacle_cell_determiner(distance)
+            grid_offset = self.cart_to_grid_pos.scale_lengths(offset)
             stopping_condition_for_mapping_with_dda = self.get_stopping_condition_for_mapping_with_dda(
-                offset, current_position_grid)
+                grid_offset, current_position_grid)
             final_cell, _ = perform_dda(
                 column_vector_to_flat_array(sensor_unit_vector),
                 current_scaled_position_cartesian,
@@ -138,3 +145,13 @@ def get_true_distance_obstacle_determiner(threshold: float) -> DistanceSensorToW
             return (False, 0)
         return (True, distance)
     return get_true_distance_determiner
+
+
+def get_true_distance_with_maximum_free_distance(threshold: float, max_free_distance_threshold) -> DistanceSensorToWallDistance:
+    assert(threshold > max_free_distance_threshold)
+
+    def true_distance_with_maximum_free_distance(distance: float):
+        if(distance > threshold):
+            return (False, max_free_distance_threshold)
+        return (True, distance)
+    return true_distance_with_maximum_free_distance

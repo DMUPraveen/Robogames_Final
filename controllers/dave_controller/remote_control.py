@@ -23,5 +23,6 @@ def control_dave_via_keyboard(keyboard: Keyboard, dave: Dave):
         return
     if(key in actions):
         actions[key](dave)
-    else:
-        dave.simple_stop()
+        return
+
+    dave.simple_stop()
