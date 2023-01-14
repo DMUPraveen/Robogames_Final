@@ -1,12 +1,13 @@
 
 import numpy as np
+from dave_lib import Dave
 
 
 class PID:
-    def __init__(self, Kp: float, Kd: float, timeste_in_ms: int):
+    def __init__(self, Kp: float, Kd: float, timestep_in_ms: int):
         self.Kp = Kp
         self.Kd = Kd
-        self.dt = timeste_in_ms/1000
+        self.dt = timestep_in_ms/1000
 
         # self.accumilated_error = 0 #to be used when implementing the Integral part
         self.previous_error = 0
@@ -41,58 +42,80 @@ class PID:
 
 
 class Motion_Control:
-    def __init__(self, timestep):
-        self.PD_rotate = PID(0.05, 0.000001, timestep)
-        self.PD_linear = PID(0.8, 0.01, timestep)
+    def __init__(self, timestep_in_ms: int):
+        self.pd_rotate = PID(0.05, 0.000001, timestep_in_ms)
+        self.pd_linear = PID(0.8, 0.01, timestep_in_ms)
         self.target_position = np.array([0.0, 0.0])
         self.w_max = 6.28
 
-    def set_target(self, target_position: np.ndarray):
-        self.target_position = target_position
+    def set_target(self, x: float, y: float):
+        self.target_position = np.array([x, y])
+        self.pd_linear.define_set_point(0)
+        self.pd_rotate.define_set_point(0)
 
-    def Rotate(self, dave):
-        # initial conditions
-        if self.PD_rotate.initial:
-            current = self.PD_rotate.angle(dave.orientation)
-            self.PD_rotate.Measure(self.rotation_target, current, initial=True)
-            self.PD_rotate.initial = False
+    # def Rotate(self, dave):
+    #     # initial conditions
+    #     if self.PD_rotate.initial:
+    #         current = self.PD_rotate.angle(dave.orientation)
+    #         self.PD_rotate.Measure(self.rotation_target, current, initial=True)
+    #         self.PD_rotate.initial = False
 
-        ut = self.PD_rotate.PD_controller(
-            self.rotation_target, dave.orientation)
+    #     ut = self.PD_rotate.PD_controller(
+    #         self.rotation_target, dave.orientation)
 
-        # velocities
-        dphi_L = -self.w_max * ut
-        dphi_R = self.w_max * ut
+    #     # velocities
+    #     dphi_L = -self.w_max * ut
+    #     dphi_R = self.w_max * ut
 
-        self.dave.set_velocity(dphi_L, dphi_R)
+    #     self.dave.set_velocity(dphi_L, dphi_R)
 
-        if round(self.PD_rotate.et0, 2) == 0 and round(self.PD_rotate.dedt, 2) == 0:
-            self.PD_rotate.Reset()
-            return True
-        else:
-            return False
+    #     if round(self.PD_rotate.et0, 2) == 0 and round(self.PD_rotate.dedt, 2) == 0:
+    #         self.PD_rotate.Reset()
+    #         return True
+    #     else:
+    #         return False
 
-    def Linear(self, dave):
+    def go_to_position(self, dave: Dave, first_turn_threshold, angle_threshold: float, linear_threshold: float):
+        '''
+        will go to position with rotating first most of the way first and then starting the linear motion
 
-        if self.PD_linear.initial:
-            X0 = array([dave.x, dave.y])
-            Xf = self.lin_target_orientation
-            current = 0
-            target = norm(Xf[0] - X0[0], Xf[1]-Xf[0])
-            self.PD_linear.Measure(target, current)
-            self.PD_linear.initial = False
+        first_turn_threshold: threshold of the error in angle to start the linear motion (Until this is reached linear motion will not start)
+        angle_threshold: threshold in the error in angle that is tolerated
+        linear_threshold: threshold in the error in the linear distance that is tolerated
+        '''
 
-        Xt = dave.orientation
-        current = norm(Xt[0] - X0[0], Xt[1] - X0[1])
-        ut = ut = self.PD_linear.PD_controller(target, current)
+        current_position = np.array([dave.x, dave.y])
+        target_vector = self.target_position - current_position  # type: ignore
 
-        dphi_L = self.w_max * ut
-        dphi_R = self.w_max * ut
+        distance_error = float(np.linalg.norm(target_vector))
+        target_direction_unit_vector = target_vector/distance_error
 
-        self.dave.set_velocity(dphi_L, dphi_R)
+        current_direction_unit_vector = dave.get_front_facing_vector()
 
-        if round(self.PD_linear.et0, 2) == 0 and round(self.PD_linear.dedt, 2) == 0:
-            self.PD_linear.Reset()
-            return True
-        else:
-            return False
+        orientation_error_magintude = np.arccos(
+            np.dot(target_direction_unit_vector, current_direction_unit_vector)
+        )
+        orientation_error_direction = np.cross(
+            target_direction_unit_vector,
+            current_direction_unit_vector
+        ).flatten()[0]
+        orientation_error_direction = orientation_error_direction / \
+            abs(orientation_error_direction)
+
+        orientation_error = orientation_error_direction*orientation_error_magintude
+
+        rotate_control_signal = self.pd_rotate.control(orientation_error)
+        linear_control_signal = self.pd_linear.control(distance_error)
+
+        # setting the required omega
+        wheels_rotate_term = rotate_control_signal*self.w_max
+        wheels_linear_term = 0
+
+        # setting the required_linear_velocity
+        if(self.pd_rotate.get_error() < first_turn_threshold):
+            # only start linear motion if this is met
+            wheels_linear_term = linear_control_signal*self.w_max
+
+        left_wheel_velocity = wheels_linear_term+wheels_rotate_term
+        right_wheel_velocity = wheels_linear_term-wheels_rotate_term
+        dave.set_velcoity(left_wheel_velocity, right_wheel_velocity)

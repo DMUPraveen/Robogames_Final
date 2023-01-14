@@ -1,3 +1,4 @@
+
 import pygame
 # from Graphic_Engine import Graphic_Engine, calculate_origin
 from Resource_manager import res_man
@@ -6,6 +7,7 @@ from communicater import get_packets_and_update, update_epuck
 from remote_control import control_dave_via_keyboard
 from New_graphic_Engine import Graphic_Engine, draw_dave, draw_grid_view, tracking_grid_view
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_obstacle_determiner
+from Motion_Control_Class import Motion_Control
 
 
 def main():
@@ -23,6 +25,7 @@ def main():
     obstacle_cell_determiner = get_true_distance_obstacle_determiner(0.6)
     mapper = Mapper(occupancy_grid, cart_to_grid_pos_converter,
                     obstacle_cell_determiner, 0.001)
+    motion_controller = Motion_Control(res.timestep)
     #######################################################################################
 
     ############################ Setting up the Resources and Communication################
@@ -69,9 +72,10 @@ def main():
         packet_recieved = get_packets_and_update(
             res.receiver, update_on_receive)
         update_epuck(dave, res)
-        control_dave_via_keyboard(res.keyboard, dave)
         mapper.update_map(dave)
         vis.run(all_visualizations)
+        print(dave)
+        control_dave_via_keyboard(res.keyboard, dave)
         # print(dave.get_distances()[0])
         # print(dave)
     ######################################################################################
