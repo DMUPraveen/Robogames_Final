@@ -68,6 +68,7 @@ def main():
     while res.robot.step(res.timestep) != -1:
         packet_recieved = get_packets_and_update(
             res.receiver, update_on_receive)
+        print(res.timestep)
         update_epuck(dave, res)
         control_dave_via_keyboard(res.keyboard, dave)
         mapper.update_map(dave)
