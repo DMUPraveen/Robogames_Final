@@ -2,6 +2,7 @@ import numpy as np
 from typing import Tuple, Callable
 from geometry import column_vector_to_flat_array, flat_array_to_column_vector
 from dave_lib import Dave
+from dda_algo import perform_dda
 
 
 class Cartesian_to_Grid:
@@ -26,6 +27,7 @@ class Cartesian_to_Grid:
         scales and translates provided x and y values to the grid origin please note the following:
             1. This function does not convert to integer domain
             2. This function only scales and transforms relatice to the scale and origin of the grid itself
+            3. Does not return row,column ... but scaled and transformed x,y (They are not swapped)
         '''
         return (
             position_x/self.scale+self.o_c,
@@ -82,6 +84,43 @@ class Mapper:
                 self.occupancy_grid.set_visited(row, column)
 
         self.occupancy_grid.set_visited(*current_grid_position)
+
+    def get_stopping_condition_for_mapping_with_dda(self, offset: float, current_grid_position: Tuple[int, int]):
+        def stopping_condition_for_mapping_with_dda(grid_cell: Tuple[int, int], distance: float):
+            row, column = grid_cell[1], grid_cell[0]
+            if not(0 <= row < self.occupancy_grid.height and 0 <= column < self.occupancy_grid.width):
+                return True
+            if(row == current_grid_position[0] and column == current_grid_position[1]):
+                return False
+            if(distance > offset):
+                return True
+            return False
+        return stopping_condition_for_mapping_with_dda
+
+    def on_new_cell_for_mapping_with_dda(self, grid_cell: Tuple[int, int]) -> None:
+        row, column = grid_cell[1], grid_cell[0]
+        if not(0 <= row < self.occupancy_grid.height and 0 <= column < self.occupancy_grid.width):
+            return
+        self.occupancy_grid.set_visited(row, column)
+
+    def mapping_with_dda(self, dave: Dave, max_free_distance_threshold: float):
+        current_position_grid = self.cart_to_grid_pos(
+            dave.x, dave.y)  # a grid position (row,column)
+        current_scaled_position_cartesian = self.cart_to_grid_pos.scale_xy_to_grid_scale(
+            dave.x, dave.y)
+        for distance, sensor_unit_vector in zip(dave.get_distances(), dave.get_sensor_unit_vectors()):
+            is_wall, offset = self.obstacle_cell_determiner(distance)
+            stopping_condition_for_mapping_with_dda = self.get_stopping_condition_for_mapping_with_dda(
+                offset, current_position_grid)
+            final_cell, _ = perform_dda(
+                column_vector_to_flat_array(sensor_unit_vector),
+                current_scaled_position_cartesian,
+                stopping_condition_for_mapping_with_dda,
+                self.on_new_cell_for_mapping_with_dda,
+            )
+            if(is_wall):
+                row, column = final_cell[1], final_cell[0]
+                self.occupancy_grid.set_obstacle(row, column)
 
 
 def get_threshold_based_obstacle_distance_determiner(threshold: float, constant_offset: float) -> DistanceSensorToWallDistance:
