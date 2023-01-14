@@ -116,8 +116,9 @@ class Motion_Control:
         if(abs(self.pd_rotate.get_error()) < first_turn_threshold):
             # only start linear motion if this is met
             wheels_linear_term = -linear_control_signal*self.w_max
-            if(absoulte_error < linear_threshold):  # avoding small vector errors
-                wheels_rotate_term = 0
+
+        if(absoulte_error < linear_threshold):  # avoding small vector errors
+            wheels_rotate_term = 0
         left_wheel_velocity = wheels_linear_term-wheels_rotate_term
         right_wheel_velocity = wheels_linear_term+wheels_rotate_term
         dave.set_velcoity(left_wheel_velocity, right_wheel_velocity)
@@ -125,11 +126,11 @@ class Motion_Control:
         # print(f"{current_direction_unit_vector=}")
         # print(f"{target_direction_unit_vector=}")
         # print(f"{orientation_error}")
-        print(f"{self.pd_rotate.get_error()=}")
-        print(f"{wheels_rotate_term=}")
-        print(f"{left_wheel_velocity=}, {right_wheel_velocity=}")
-        # print(f"{self.pd_linear.get_error()=}")
-        print("******************************")
+        # print(f"{self.pd_rotate.get_error()=}")
+        # print(f"{wheels_rotate_term=}")
+        # print(f"{left_wheel_velocity=}, {right_wheel_velocity=}")
+        # # print(f"{self.pd_linear.get_error()=}")
+        # print("******************************")
 
         if(absoulte_error < linear_threshold):
             return True
