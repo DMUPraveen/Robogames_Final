@@ -9,7 +9,7 @@ from New_graphic_Engine import Graphic_Engine, draw_dave, draw_grid_view, tracki
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_with_maximum_free_distance
 from Motion_Control_Class import Motion_Control
 from path_planning import Point_Follow, Point_Follow_States, Topological_Map, Reachability_Checker, find_best_path_possible, transform_node_list_to_point_follow_list, Dashability_Checker
-from algorthim1 import Target_Reacher, Timer
+from algorthim1 import Target_Reacher, Timer, Supermachine
 import numpy as np
 
 
@@ -89,13 +89,14 @@ def main():
         motion_controller,
         point_follower,
     )
-    target_reacher.set_target_and_reset((-0.939, 0.297))
+    # target_reacher.set_target_and_reset((-0.939, 0.297))
+    supermachine = Supermachine(target_reacher, dave, env)
     ######################################################################################
 
     ############################## Main Loop #############################################
-    previous_state = None
+    # previous_state = None
     timer = Timer()
-    reverse_time = 100
+    # reverse_time = 100
     while res.robot.step(res.timestep) != -1:
         packet_recieved = get_packets_and_update(
             res.receiver, update_on_receive)
@@ -104,26 +105,11 @@ def main():
             continue
         mapper.mapping_with_dda(dave)
         vis.run(all_visualizations)
+        supermachine.run_target_reacher(100)
+        supermachine.check_and_set_targets()
         # print(point_follower.state)
-        if(target_reacher.state != previous_state):
-            print(target_reacher.state)
-            previous_state = target_reacher.state
-        if(target_reacher.is_super_stuck()):
-            v = -1.0
-            omega = np.random.random()*1.0
-            dave.set_velcoity(v+omega, v-omega)
-            timer.tick()
-            if(timer.get_time() > reverse_time):
-                timer.reset()
-                if(target_reacher.target is None):
-                    target_reacher.reset()
-                else:
-                    target_reacher.set_target_and_reset(target_reacher.target)
-        else:
-            target_reacher.run()
-
-            # print(dave)
-            # control_dave_via_keyboard(res.keyboard, dave)
-            # print(dave.get_distances()[0])
-            # print(dave)
-            ######################################################################################
+        # print(dave)
+        # control_dave_via_keyboard(res.keyboard, dave)
+        # print(dave.get_distances()[0])
+        # print(dave)
+        ######################################################################################

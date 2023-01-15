@@ -8,6 +8,7 @@ from path_planning import Point_Follow, Point_Follow_States, Topological_Map,\
 from wall_following import attempt2_left_wall_following, attempt2_right_wall_following, any_wall_detected
 from enum import Enum
 import numpy as np
+from random import random
 
 
 class Target_Reacher_State(Enum):
@@ -257,5 +258,35 @@ class Target_Reacher:
         self.point_follow.run(self.dave)
 
 
-class supermachine:
-    def __init__(self):
+class Supermachine:
+    def __init__(self, target_reacher: Target_Reacher, dave: Dave, env: Environment):
+        self.target_reacher = target_reacher
+        self.dave = dave
+        self.timer = Timer()
+        self.env = env
+        self.current_target = None
+
+    def check_and_set_targets(self):
+        if(self.current_target is None or self.current_target not in self.env.collectibles):
+            self.current_target = self.env.collectibles[0]
+            self.target_reacher.set_target_and_reset(self.current_target)
+            print(f"New target given {self.current_target}")
+
+    def run_target_reacher(self, stuck_evasion_reverse_time: int):
+        if(self.current_target is None):
+            return
+
+        if(self.target_reacher.is_super_stuck()):
+            v = -1.0
+            omega = random()*1.0
+            self.dave.set_velcoity(v+omega, v-omega)
+            self.timer.tick()
+            if(self.timer.get_time() > stuck_evasion_reverse_time):
+                self.timer.reset()
+                if(self.target_reacher.target is None):
+                    self.target_reacher.reset()
+                else:
+                    self.target_reacher.set_target_and_reset(
+                        self.target_reacher.target)
+        else:
+            self.target_reacher.run()
