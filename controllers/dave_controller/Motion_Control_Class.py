@@ -132,13 +132,13 @@ class Motion_Control:
         # print(f"{left_wheel_velocity=}, {right_wheel_velocity=}")
         # # print(f"{self.pd_linear.get_error()=}")
         # print("******************************")
-        # if(left_front_wall_detected(dave)):
-        #     dave.left_v += delta
-        #     dave.right_v -= delta
+        if(left_front_wall_detected(dave)):
+            dave.left_v += delta
+            dave.right_v -= delta
 
-        # if(left_front_wall_detected(dave)):
-        #     dave.left_v -= delta
-        #     dave.right_v += delta
+        if(right_front_wall_detected(dave)):
+            dave.left_v -= delta
+            dave.right_v += delta
 
         if(absoulte_error < linear_threshold):
             return True

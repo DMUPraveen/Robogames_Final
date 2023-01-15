@@ -333,6 +333,8 @@ class Supermachine:
         else:
             # print("setting new collectible")
             self.current_target = self.get_closest(self.env.collectibles)
+            print("closest collectible", self.current_target,
+                  self.dave.x, self.dave.y)
 
         self.target_reacher.set_target_and_reset(self.current_target)
 
@@ -388,7 +390,7 @@ class Supermachine:
         if(self.target_reacher.is_super_stuck()):
             # print("running reovery")
             v = -1.0
-            omega = random()*1.0
+            omega = 0.5*1.0
             self.dave.set_velcoity(v+omega, v-omega)
             self.timer.tick()
             if(self.timer.get_time() > stuck_evasion_reverse_time):
