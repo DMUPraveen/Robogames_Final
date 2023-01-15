@@ -2,7 +2,9 @@ from typing import Iterable, List, Tuple, Deque, Set, Dict, Optional
 from dave_lib import Dave, update_dave_pose, update_environment, Environment
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_with_maximum_free_distance
 from Motion_Control_Class import Motion_Control
-from path_planning import Point_Follow, Point_Follow_States, Topological_Map, Reachability_Checker, find_best_path_possible, transform_node_list_to_point_follow_list, Dashability_Checker
+from path_planning import Point_Follow, Point_Follow_States, Topological_Map,\
+    find_best_path_possible, transform_node_list_to_point_follow_list, Dashability_Checker,\
+    find_nearest_unvisited_cell, find_connectible_potins
 from wall_following import attempt2_left_wall_following, attempt2_right_wall_following, any_wall_detected
 from enum import Enum
 import numpy as np
@@ -17,11 +19,16 @@ class Target_Reacher_State(Enum):
     RIGHT_WALL_FOLLOWING = 5
     FINISHED = 6
     STUCK = 7
+    ESCAPE_PATH = 8
+    SUPER_STUCK = 9
 
 
 class Timer():
     def __init__(self):
         self.time: int = 0
+
+    def reset(self):
+        self.time = 0
 
     def tick(self):
         self.time += 1
@@ -52,6 +59,8 @@ class Target_Reacher:
             Target_Reacher_State.PATH_FOLLOWING: self.path_following,
             Target_Reacher_State.LEFT_WALL_FOLLOWING: self.left_wall_following,
             Target_Reacher_State.RIGHT_WALL_FOLLOWING: self.right_wall_following,
+            Target_Reacher_State.ESCAPE_PATH: self.on_escape_path,
+            Target_Reacher_State.STUCK: self.on_stuck,
         }
         self.timer = Timer()
 
@@ -162,6 +171,8 @@ class Target_Reacher:
     STUCK_THRESHOLD = 300
 
     def run(self):
+        if(self.state == Target_Reacher_State.SUPER_STUCK):
+            return
         new_topo_cell = self.topo_map.cartesian_to_grid(
             self.dave.x, self.dave.y)
         # if(self.current_topo_cell is not None):
@@ -176,8 +187,8 @@ class Target_Reacher:
 
             if (last_time > self.start_time):
                 if (new_time - last_time) > self.LOOP_THRESHOLD:
-                    self.state = Target_Reacher_State.STUCK
-                    return
+                    print("loop->stuck")
+                    # self.state = Target_Reacher_State.STUCK
             self.topo_map.visited_times[row][column] = new_time
         else:
             # print("still in the same cell")
@@ -185,10 +196,66 @@ class Target_Reacher:
             last_time = self.topo_map.visited_times[row][column]
             if(self.timer.get_time()-last_time) > self.STUCK_THRESHOLD:
                 # print(last_time, self.timer.get_time())
+                # print("stuck")
+                if(self.state == Target_Reacher_State.ESCAPE_PATH):
+                    self.state = Target_Reacher_State.SUPER_STUCK
+                    return
+
                 self.state = Target_Reacher_State.STUCK
-                return
 
         if(self.state == Target_Reacher_State.FINISHED):
             return
         self.timer.tick()
         self.funs_to_run[self.state]()
+
+    def is_super_stuck(self):
+        return (self.state == Target_Reacher_State.SUPER_STUCK)
+
+    def i_am_super_stuck(self):
+        self.state = Target_Reacher_State.SUPER_STUCK
+
+    def on_stuck(self):
+        if(self.current_topo_cell is None):
+            # raise Exception("current cell is does not exist")
+            self.i_am_super_stuck()
+            return
+
+        ret = find_nearest_unvisited_cell(
+            self.topo_map.visited_times, self.current_topo_cell, self.start_time)
+        if(ret is None):
+            # raise Exception("No unvisited cells")
+            self.i_am_super_stuck()
+            return
+        unvisited, parent = ret
+        connectible_points = find_connectible_potins(
+            parent, unvisited, self.topo_map, self.dashability_checker)
+        if(connectible_points is None):
+            # raise Exception("No")
+            self.i_am_super_stuck()
+            return
+        path = find_best_path_possible(
+            self.topo_map, (self.dave.x, self.dave.y), connectible_points[1])
+        if(path is None):
+            self.i_am_super_stuck()
+            return
+            # raise Exception("No path found")
+            # print(self.topo_map.topo_grid[parent[0]][parent[1]])
+        self.state = Target_Reacher_State.ESCAPE_PATH
+        escape_path = transform_node_list_to_point_follow_list(path)
+        escape_path.append(connectible_points[2])
+        self.point_follow.terminate_current_run_and_set_path(escape_path)
+        self.point_follow.start_current_path()
+
+    def on_escape_path(self):
+        if(self.point_follow.state == Point_Follow_States.FINISHED):
+            target = self.target
+            if(target is None):
+                self.reset()
+            else:
+                self.set_target_and_reset(target)
+            return
+        self.point_follow.run(self.dave)
+
+
+class supermachine:
+    def __init__(self):

@@ -202,7 +202,7 @@ class Topological_Map:
             [[] for _ in range(self.width)] for _ in range(self.width)
         ]
         self.visited_times: List[List[int]] = [
-            [0]*self.width for _ in range(self.width)
+            [-1]*self.width for _ in range(self.width)
         ]
         self.reachability_checker = reachability_checker
         self.reachability_distance_threshold = reachability_distance_threshold
@@ -271,7 +271,7 @@ class Topological_Map:
                 self.get_nodes_in_grid_position(*neighbour_topo_cell))
 
         distance_min = self.spread_out_in_distance(
-            all_nodes, dave.x, dave.y)
+            nodes, dave.x, dave.y)
 
         compatible = (
             length_in_grid < self.max_nodes_per_cell) and self.placement_distance < distance_min
@@ -312,6 +312,10 @@ class Topological_Map:
         topo_cell = self.cartesian_to_grid(x_pos, y_pos)
         neighbouring_topo_cells = self.get_neighbouring_topo_cells(*topo_cell)
         neighbouring_topo_cells.append(topo_cell)
+        cell = find_nearest_visited_cell(self, topo_cell, -1)
+        # print(cell)
+        if(cell is not None):
+            neighbouring_topo_cells.append(cell[0])
         return self.get_all_nodes_in_cells(neighbouring_topo_cells)
 
     def find_closest_node(self, x_pos: float, y_pos: float):
@@ -322,6 +326,10 @@ class Topological_Map:
 
 
 def bfs_find(target_nodes: Iterable[TopoNode], start_node: TopoNode):
+    # print("running_bfs")
+    # for target_node in target_nodes:
+    #     # print(target_node)
+    # print("*************************")
     bfs_queue = Queue()
     targets = set(target_nodes)
     bfs_queue.put(start_node)
@@ -335,13 +343,14 @@ def bfs_find(target_nodes: Iterable[TopoNode], start_node: TopoNode):
         return [start_node]
     while(not bfs_queue.empty()):
         node: TopoNode = bfs_queue.get()
+        # print(node)
         for connection in node.connections:
             if(connection in visited):
                 continue
             visited.add(connection)
             parent_node[connection] = node
             bfs_queue.put(connection)
-            if(node in targets):
+            if(connection in targets):
                 destintation = node
                 break
     if(destintation is None):
@@ -357,6 +366,7 @@ def bfs_find(target_nodes: Iterable[TopoNode], start_node: TopoNode):
 def find_best_path_possible(topo_map: Topological_Map, position_start: Tuple[float, float], position_target: Tuple[float, float]):
     closest_node = topo_map.find_closest_node(*position_start)
     if(closest_node is None):
+        print("closest node is None")
         return None
     target_nodes = topo_map.find_all_close_nodes(*position_target)
     # print(closest_node, target_nodes)
@@ -442,6 +452,7 @@ DIRECTIONS = [
 
 
 def find_nearest_unvisited_cell(visited_times: List[List[int]], start_cell: Tuple[int, int], start_time: int):
+    # print("runnging find nearest")
     bfs_queue = Queue()
 
     def within_range(r, c): return 0 <= r < len(
@@ -457,14 +468,93 @@ def find_nearest_unvisited_cell(visited_times: List[List[int]], start_cell: Tupl
     bfs_queue.put(start_cell)
     bfs_visited = set()
     bfs_visited.add(start_cell)
-    while(not bfs_queue.empty):
+    while(not bfs_queue.empty()):
         r, c = bfs_queue.get()
+        # print(r, c)
         for ne in get_nes(r, c):
+            # print((r, c), ne)
             if(ne not in bfs_visited):
                 bfs_visited.add(ne)
                 bfs_queue.put(ne)
                 nr, nc = ne
-                if(visited_times[r][c] < start_time):
+                # print(visited_times[nr][nc], start_time)
+                if(visited_times[nr][nc] < start_time):
                     return (nr, nc), (r, c)
 
+    return None
+
+
+def find_nearest_visited_cell(topo_map: Topological_Map, start_cell: Tuple[int, int], start_time):
+    # print("runnging find nearest")
+    bfs_queue = Queue()
+    visited_times = topo_map.visited_times
+
+    def within_range(r, c): return 0 <= r < len(
+        visited_times) and 0 <= c < len(visited_times[0])
+
+    def get_nes(r, c):
+        nes = []
+        for dr, dc in DIRECTIONS:
+            nr, nc = r+dr, c+dc
+            if(within_range(nr, nc)):
+                nes.append((nr, nc))
+        return nes
+    bfs_queue.put(start_cell)
+    bfs_visited = set()
+    bfs_visited.add(start_cell)
+    while(not bfs_queue.empty()):
+        r, c = bfs_queue.get()
+        # print(r, c)
+        for ne in get_nes(r, c):
+            # print((r, c), ne)
+            if(ne not in bfs_visited):
+                bfs_visited.add(ne)
+                bfs_queue.put(ne)
+                nr, nc = ne
+                # print(visited_times[nr][nc], start_time)
+                if(topo_map.visited_times[nr][nc] > start_time and len(topo_map.topo_grid[nr][nc]) != 0):
+                    return (nr, nc), (r, c)
+
+    return None
+
+
+def find_connectible_potins(cell1: Tuple[int, int], cell2: Tuple[int, int], topo_map: Topological_Map, dashability_checker: Dashability_Checker):
+
+    start_nodes = topo_map.get_nodes_in_grid_position(*cell1)
+    # print(start_nodes)
+    for _ in range(1000):
+        r11 = 0.5-np.random.random()
+        r12 = 0.5-np.random.random()
+        xm1, ym1, s1 = topo_map.cartesian_to_grid.get_random_points_center_and_range(
+            *cell1)
+        x1, y1 = xm1+r11*s1, ym1+r12*s1
+        r21 = 0.5-np.random.random()
+        r22 = 0.5-np.random.random()
+        xm2, ym2, s2 = topo_map.cartesian_to_grid.get_random_points_center_and_range(
+            *cell2)
+        x2, y2 = xm2+r21*s2, ym2+r22*s2
+        first_dash = dashability_checker.check_dashability(
+            x1, y1,
+            x2, y2
+        )
+        start_nodes = topo_map.get_nodes_in_grid_position(*cell1)
+        second_dash = False
+        parent_node = None
+        stx = 3.1415
+        sty = 3.1415
+        for node in start_nodes:
+            stx, sty = node.position
+            second_dash = dashability_checker.check_dashability(
+                stx, sty,
+                x1, y1
+            )
+            if(second_dash):
+                parent_node = node
+                break
+        # print(stx, sty, x1, y1, x2, y2, cell1, cell2)
+        if not(first_dash):
+            continue
+        if(second_dash):
+            return (parent_node, (x1, y1), (x2, y2))
+    print("Not connected after thousand iterations")
     return None

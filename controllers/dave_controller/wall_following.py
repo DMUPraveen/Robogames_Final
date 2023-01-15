@@ -78,7 +78,7 @@ def defining_equation(dave: Dave, sensor_1, sensor_2, desired_wall_distance, dir
     # if dave.wall_dis[sensor_1] > 100 and dave.wall_dis[sensor_2] > 100:
     #     return -V
 
-    return -1.2
+    return -1.0
 
 
 # def going_towards_a_corner(dave):

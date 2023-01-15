@@ -9,7 +9,8 @@ from New_graphic_Engine import Graphic_Engine, draw_dave, draw_grid_view, tracki
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_with_maximum_free_distance
 from Motion_Control_Class import Motion_Control
 from path_planning import Point_Follow, Point_Follow_States, Topological_Map, Reachability_Checker, find_best_path_possible, transform_node_list_to_point_follow_list, Dashability_Checker
-from algorthim1 import Target_Reacher
+from algorthim1 import Target_Reacher, Timer
+import numpy as np
 
 
 def main():
@@ -76,7 +77,7 @@ def main():
     reachability_checker = Reachability_Checker(
         occupancy_grid, cart_to_grid_pos_converter)
     topo_map = Topological_Map(
-        5.0, 5.0, 0.1, 0.03, 2, reachability_checker, 0.01)
+        5.0, 5.0, 0.1, 0.03, 5, reachability_checker, 0.01)
 
     dashability_checker = Dashability_Checker(
         occupancy_grid, cart_to_grid_pos_converter)
@@ -92,19 +93,37 @@ def main():
     ######################################################################################
 
     ############################## Main Loop #############################################
-
+    previous_state = None
+    timer = Timer()
+    reverse_time = 100
     while res.robot.step(res.timestep) != -1:
         packet_recieved = get_packets_and_update(
             res.receiver, update_on_receive)
         update_epuck(dave, res)
+        if(dave.x == 0 and dave.y == 0):
+            continue
         mapper.mapping_with_dda(dave)
         vis.run(all_visualizations)
         # print(point_follower.state)
-        target_reacher.run()
-        # print(target_reacher.state)
-        topo_map.construct_topo_map(dave)
-        # print(dave)
-        # control_dave_via_keyboard(res.keyboard, dave)
-        # print(dave.get_distances()[0])
-        # print(dave)
-    ######################################################################################
+        if(target_reacher.state != previous_state):
+            print(target_reacher.state)
+            previous_state = target_reacher.state
+        if(target_reacher.is_super_stuck()):
+            v = -1.0
+            omega = np.random.random()*1.0
+            dave.set_velcoity(v+omega, v-omega)
+            timer.tick()
+            if(timer.get_time() > reverse_time):
+                timer.reset()
+                if(target_reacher.target is None):
+                    target_reacher.reset()
+                else:
+                    target_reacher.set_target_and_reset(target_reacher.target)
+        else:
+            target_reacher.run()
+
+            # print(dave)
+            # control_dave_via_keyboard(res.keyboard, dave)
+            # print(dave.get_distances()[0])
+            # print(dave)
+            ######################################################################################
