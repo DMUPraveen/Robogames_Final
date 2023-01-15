@@ -18,8 +18,8 @@ class Cartesian_to_Grid:
         '''
         returns the (row,column) corresponding to the positions provided
         '''
-        row = int(position_y / self.scale) + self.o_r
-        column = int(position_x / self.scale) + self.o_c
+        row = int(position_y / self.scale + self.o_r)
+        column = int(position_x / self.scale + self.o_c)
         return (row, column)
 
     def scale_xy_to_grid_scale(self, position_x: float, position_y: float) -> Tuple[float, float]:

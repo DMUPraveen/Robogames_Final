@@ -46,6 +46,7 @@ def perform_dda(direction_vector: Tuple[float, float],
     stop_flag = False
     distance: float = 0.0
     tuple_current_tile = tuple(current_tile)
+    # print(distance)
     while(not stop_flag):
         on_new_cell(tuple_current_tile)
         if(x_ray_length < y_ray_length):
@@ -54,7 +55,7 @@ def perform_dda(direction_vector: Tuple[float, float],
             x_ray_length += Sx
         else:
             current_tile[1] += step[1]
-            distance = x_ray_length
+            distance = y_ray_length
             y_ray_length += Sy
         tuple_current_tile = tuple(current_tile)
         if(stopping_condition(tuple_current_tile, distance)):

@@ -13,15 +13,15 @@ def main():
     res = res_man()
     dave = Dave()
     env = Environment()
-    OCCUPANCY_GRID_WIDTH = 4000
-    OCCUPANCY_GRID_HEIGHT = 4000
+    OCCUPANCY_GRID_WIDTH = 5000
+    OCCUPANCY_GRID_HEIGHT = 5000
     OCCUPANCY_GRID_SCALE = 0.004
     occupancy_grid = Occupancy_Grid(
         OCCUPANCY_GRID_WIDTH, OCCUPANCY_GRID_HEIGHT)
     cart_to_grid_pos_converter = Cartesian_to_Grid(
         OCCUPANCY_GRID_SCALE, OCCUPANCY_GRID_WIDTH//2, OCCUPANCY_GRID_HEIGHT//2)
     obstacle_cell_determiner = get_true_distance_with_maximum_free_distance(
-        0.06, 0.02)
+        0.06, 0.04)
     mapper = Mapper(occupancy_grid, cart_to_grid_pos_converter,
                     obstacle_cell_determiner, 0.001)
     #######################################################################################
