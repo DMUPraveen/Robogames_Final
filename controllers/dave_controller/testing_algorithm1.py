@@ -100,7 +100,7 @@ def main():
     t = 0
     while res.robot.step(res.timestep) != -1:
         t += 1
-        if t*res.timestep <= 360000:
+        if t*res.timestep <= 780000:
             attempt2_left_wall_following(dave)
         packet_recieved = get_packets_and_update(
             res.receiver, update_on_receive)
