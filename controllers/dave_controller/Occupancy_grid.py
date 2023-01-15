@@ -42,6 +42,9 @@ class Cartesian_to_Grid:
 
 
 class Occupancy_Grid:
+    OBSTACLE = 1
+    CELL_VISITED = 2
+
     def __init__(self, width: int, height: int,):
         self.width = width
         self.height = height
@@ -52,11 +55,11 @@ class Occupancy_Grid:
 
     def set_obstacle(self, row, column):
         # print(f"obstacle @{row,column}")
-        self.grid[row, column] = 1
+        self.grid[row, column] = self.OBSTACLE
 
     def set_visited(self, row, column):
         # print(f"visited @{row,column}")
-        self.grid[row, column] = 2
+        self.grid[row, column] = self.CELL_VISITED
 
 
 DistanceSensorToWallDistance = Callable[[float], Tuple[bool, float]]
