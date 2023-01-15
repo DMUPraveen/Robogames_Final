@@ -40,6 +40,13 @@ class Cartesian_to_Grid:
         '''
         return length_in_meters/self.scale
 
+    def get_random_points_center_and_range(self, row: int, column: int):
+        y0 = (row-self.o_r)*self.scale
+        x0 = (column-self.o_c)*self.scale
+        xm = x0+self.scale*0.5
+        ym = y0+self.scale*0.5
+        return (xm, ym, 0.5)
+
 
 class Occupancy_Grid:
     OBSTACLE = 1
