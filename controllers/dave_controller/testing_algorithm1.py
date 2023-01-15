@@ -9,6 +9,7 @@ from New_graphic_Engine import Graphic_Engine, draw_dave, draw_grid_view, tracki
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_with_maximum_free_distance
 from Motion_Control_Class import Motion_Control
 from path_planning import Point_Follow, Point_Follow_States, Topological_Map, Reachability_Checker, find_best_path_possible, transform_node_list_to_point_follow_list, Dashability_Checker
+from wall_following import attempt2_left_wall_following
 from algorthim1 import Target_Reacher, Timer, Supermachine
 import numpy as np
 
@@ -96,8 +97,11 @@ def main():
     ############################## Main Loop #############################################
     # previous_state = None
     timer = Timer()
-    # reverse_time = 100
+    t = 0
     while res.robot.step(res.timestep) != -1:
+        t += 1
+        if t*res.timestep <= 360000:
+            attempt2_left_wall_following(dave)
         packet_recieved = get_packets_and_update(
             res.receiver, update_on_receive)
         update_epuck(dave, res)
@@ -114,4 +118,3 @@ def main():
         # control_dave_via_keyboard(res.keyboard, dave)
         # print(dave.get_distances()[0])
         # print(dave)
-        ######################################################################################
