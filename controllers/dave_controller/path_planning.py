@@ -259,6 +259,7 @@ class Topological_Map:
 
     def construct_topo_map(self, dave: Dave):
         row, column = self.cartesian_to_grid(dave.x, dave.y)
+        # print(row, column, dave.x, dave.y, self.width)
         nodes = self.get_nodes_in_grid_position(row, column)
         length_in_grid = len(nodes)
 
@@ -486,8 +487,9 @@ def find_nearest_unvisited_cell(visited_times: List[List[int]], start_cell: Tupl
     return None
 
 
-def find_nearest_visited_cell(topo_map: Topological_Map, start_cell: Tuple[int, int], start_time):
+def find_nearest_visited_cell(topo_map: Topological_Map, start_cell: Tuple[int, int], tried):
     # print("runnging find nearest")
+
     bfs_queue = Queue()
     visited_times = topo_map.visited_times
 
@@ -517,7 +519,7 @@ def find_nearest_visited_cell(topo_map: Topological_Map, start_cell: Tuple[int, 
                 nr, nc = ne
                 # print(visited_times[nr][nc], start_time)
                 # print("nr,nc", topo_map.topo_grid[nr][nc], nr, nc)
-                if(len(topo_map.topo_grid[nr][nc]) != 0):
+                if(len(topo_map.topo_grid[nr][nc]) != 0 and ((nr, nc) not in tried)):
                     return (nr, nc), (r, c)
 
     return None
