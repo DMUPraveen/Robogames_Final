@@ -201,6 +201,9 @@ class Topological_Map:
         self.topo_grid: List[List[List[TopoNode]]] = [
             [[] for _ in range(self.width)] for _ in range(self.width)
         ]
+        self.visited_times: List[List[int]] = [
+            [0]*self.width for _ in range(self.width)
+        ]
         self.reachability_checker = reachability_checker
         self.reachability_distance_threshold = reachability_distance_threshold
 
@@ -428,3 +431,40 @@ class Dashability_Checker:
         if(self.obstalce_detected):
             return False
         return True
+
+
+DIRECTIONS = [
+    (1, 0),
+    (-1, 0),
+    (0, -1),
+    (0, 1),
+]
+
+
+def find_nearest_unvisited_cell(visited_times: List[List[int]], start_cell: Tuple[int, int], start_time: int):
+    bfs_queue = Queue()
+
+    def within_range(r, c): return 0 <= r < len(
+        visited_times) and 0 <= c < len(visited_times[0])
+
+    def get_nes(r, c):
+        nes = []
+        for dr, dc in DIRECTIONS:
+            nr, nc = r+dr, c+dc
+            if(within_range(nr, nc)):
+                nes.append((nr, nc))
+        return nes
+    bfs_queue.put(start_cell)
+    bfs_visited = set()
+    bfs_visited.add(start_cell)
+    while(not bfs_queue.empty):
+        r, c = bfs_queue.get()
+        for ne in get_nes(r, c):
+            if(ne not in bfs_visited):
+                bfs_visited.add(ne)
+                bfs_queue.put(ne)
+                nr, nc = ne
+                if(visited_times[r][c] < start_time):
+                    return (nr, nc), (r, c)
+
+    return None

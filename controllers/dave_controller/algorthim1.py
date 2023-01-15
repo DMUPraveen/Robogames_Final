@@ -16,6 +16,18 @@ class Target_Reacher_State(Enum):
     LEFT_WALL_FOLLOWING = 4
     RIGHT_WALL_FOLLOWING = 5
     FINISHED = 6
+    STUCK = 7
+
+
+class Timer():
+    def __init__(self):
+        self.time: int = 0
+
+    def tick(self):
+        self.time += 1
+
+    def get_time(self):
+        return self.time
 
 
 class Target_Reacher:
@@ -30,6 +42,8 @@ class Target_Reacher:
         self.motion_controller = motion_controller
         self.point_follow = point_follow
         self.dashability_checker = dashability_checker
+        self.start_time = 0
+        self.current_topo_cell = None
 
         self.funs_to_run = {
             Target_Reacher_State.IDLE: self.on_idle,
@@ -39,12 +53,15 @@ class Target_Reacher:
             Target_Reacher_State.LEFT_WALL_FOLLOWING: self.left_wall_following,
             Target_Reacher_State.RIGHT_WALL_FOLLOWING: self.right_wall_following,
         }
+        self.timer = Timer()
 
     def reset(self):
         if(self.path_to_follow is not None):
             self.path_to_follow.clear()
         self.target = None
         self.state = Target_Reacher_State.IDLE
+        self.start_time = self.timer.get_time()
+        self.timer.tick()
 
     def set_target_and_reset(self, target: Tuple[float, float]):
         self.reset()
@@ -141,7 +158,37 @@ class Target_Reacher:
         if(can_dash):
             self.go_to_dashing()
 
+    LOOP_THRESHOLD = 10
+    STUCK_THRESHOLD = 300
+
     def run(self):
+        new_topo_cell = self.topo_map.cartesian_to_grid(
+            self.dave.x, self.dave.y)
+        # if(self.current_topo_cell is not None):
+        #     row, column = self.current_topo_cell
+        #     last_time = self.topo_map.visited_times[row][column]
+        #     print(row, column, last_time, self.timer.get_time())
+        if(new_topo_cell != self.current_topo_cell or self.current_topo_cell is None):
+            self.current_topo_cell = new_topo_cell
+            row, column = self.current_topo_cell
+            last_time = self.topo_map.visited_times[row][column]
+            new_time = self.timer.get_time()
+
+            if (last_time > self.start_time):
+                if (new_time - last_time) > self.LOOP_THRESHOLD:
+                    self.state = Target_Reacher_State.STUCK
+                    return
+            self.topo_map.visited_times[row][column] = new_time
+        else:
+            # print("still in the same cell")
+            row, column = self.current_topo_cell
+            last_time = self.topo_map.visited_times[row][column]
+            if(self.timer.get_time()-last_time) > self.STUCK_THRESHOLD:
+                # print(last_time, self.timer.get_time())
+                self.state = Target_Reacher_State.STUCK
+                return
+
         if(self.state == Target_Reacher_State.FINISHED):
             return
+        self.timer.tick()
         self.funs_to_run[self.state]()

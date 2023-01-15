@@ -101,7 +101,7 @@ def main():
         vis.run(all_visualizations)
         # print(point_follower.state)
         target_reacher.run()
-        print(target_reacher.state)
+        # print(target_reacher.state)
         topo_map.construct_topo_map(dave)
         # print(dave)
         # control_dave_via_keyboard(res.keyboard, dave)
