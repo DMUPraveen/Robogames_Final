@@ -1,6 +1,7 @@
 
 import numpy as np
 from dave_lib import Dave
+from wall_following import left_front_wall_detected, right_front_wall_detected
 
 
 class PID:
@@ -121,8 +122,8 @@ class Motion_Control:
             wheels_rotate_term = 0
         left_wheel_velocity = wheels_linear_term-wheels_rotate_term
         right_wheel_velocity = wheels_linear_term+wheels_rotate_term
+        delta = 0.5
         dave.set_velcoity(left_wheel_velocity, right_wheel_velocity)
-
         # print(f"{current_direction_unit_vector=}")
         # print(f"{target_direction_unit_vector=}")
         # print(f"{orientation_error}")
@@ -131,6 +132,13 @@ class Motion_Control:
         # print(f"{left_wheel_velocity=}, {right_wheel_velocity=}")
         # # print(f"{self.pd_linear.get_error()=}")
         # print("******************************")
+        # if(left_front_wall_detected(dave)):
+        #     dave.left_v += delta
+        #     dave.right_v -= delta
+
+        # if(left_front_wall_detected(dave)):
+        #     dave.left_v -= delta
+        #     dave.right_v += delta
 
         if(absoulte_error < linear_threshold):
             return True

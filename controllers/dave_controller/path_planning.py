@@ -7,6 +7,7 @@ from Occupancy_grid import Cartesian_to_Grid, Occupancy_Grid, flat_array_to_colu
 from dda_algo import perform_dda
 import numpy as np
 from queue import Queue
+import random
 
 
 class Point_Follow_States(Enum):
@@ -312,10 +313,11 @@ class Topological_Map:
         topo_cell = self.cartesian_to_grid(x_pos, y_pos)
         neighbouring_topo_cells = self.get_neighbouring_topo_cells(*topo_cell)
         neighbouring_topo_cells.append(topo_cell)
-        cell = find_nearest_visited_cell(self, topo_cell, -1)
-        # print(cell)
-        if(cell is not None):
-            neighbouring_topo_cells.append(cell[0])
+        # cell = find_nearest_visited_cell(self, topo_cell, -1)
+        # print(f"{cell=}")
+        # if(cell is not None):
+
+        #     neighbouring_topo_cells.append(cell[0])
         return self.get_all_nodes_in_cells(neighbouring_topo_cells)
 
     def find_closest_node(self, x_pos: float, y_pos: float):
@@ -328,7 +330,7 @@ class Topological_Map:
 def bfs_find(target_nodes: Iterable[TopoNode], start_node: TopoNode):
     # print("running_bfs")
     # for target_node in target_nodes:
-    #     # print(target_node)
+    # print(target_node)
     # print("*************************")
     bfs_queue = Queue()
     targets = set(target_nodes)
@@ -489,8 +491,9 @@ def find_nearest_visited_cell(topo_map: Topological_Map, start_cell: Tuple[int, 
     bfs_queue = Queue()
     visited_times = topo_map.visited_times
 
-    def within_range(r, c): return 0 <= r < len(
-        visited_times) and 0 <= c < len(visited_times[0])
+    def within_range(
+        r, c): return 0 <= r < topo_map.width and 0 <= c < topo_map.width
+    # print(topo_map.width)
 
     def get_nes(r, c):
         nes = []
@@ -504,6 +507,7 @@ def find_nearest_visited_cell(topo_map: Topological_Map, start_cell: Tuple[int, 
     bfs_visited.add(start_cell)
     while(not bfs_queue.empty()):
         r, c = bfs_queue.get()
+        # print("rc", r, c)
         # print(r, c)
         for ne in get_nes(r, c):
             # print((r, c), ne)
@@ -512,7 +516,8 @@ def find_nearest_visited_cell(topo_map: Topological_Map, start_cell: Tuple[int, 
                 bfs_queue.put(ne)
                 nr, nc = ne
                 # print(visited_times[nr][nc], start_time)
-                if(topo_map.visited_times[nr][nc] > start_time and len(topo_map.topo_grid[nr][nc]) != 0):
+                # print("nr,nc", topo_map.topo_grid[nr][nc], nr, nc)
+                if(len(topo_map.topo_grid[nr][nc]) != 0):
                     return (nr, nc), (r, c)
 
     return None
@@ -523,13 +528,13 @@ def find_connectible_potins(cell1: Tuple[int, int], cell2: Tuple[int, int], topo
     start_nodes = topo_map.get_nodes_in_grid_position(*cell1)
     # print(start_nodes)
     for _ in range(1000):
-        r11 = 0.5-np.random.random()
-        r12 = 0.5-np.random.random()
+        r11 = 0.5-random.random()
+        r12 = 0.5-random.random()
         xm1, ym1, s1 = topo_map.cartesian_to_grid.get_random_points_center_and_range(
             *cell1)
         x1, y1 = xm1+r11*s1, ym1+r12*s1
-        r21 = 0.5-np.random.random()
-        r22 = 0.5-np.random.random()
+        r21 = 0.5-random.random()
+        r22 = 0.5-random.random()
         xm2, ym2, s2 = topo_map.cartesian_to_grid.get_random_points_center_and_range(
             *cell2)
         x2, y2 = xm2+r21*s2, ym2+r22*s2

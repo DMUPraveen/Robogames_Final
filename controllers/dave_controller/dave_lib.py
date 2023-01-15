@@ -81,6 +81,8 @@ class Environment:
     def __init__(self):
         self.collectibles = [(0.0, 0.0)]
         self.goals = [(0.0, 0.0)]
+        self.rupees = 0
+        self.dollars = 0
 
 
 def pretty_print_sensor_data(dave: Dave):
@@ -97,4 +99,6 @@ def update_dave_pose(packet, dave: Dave):
 
 def update_environment(packet, env: Environment):
     env.collectibles = packet["collectibles"]
-    env.goals = packet["goals"]
+    env.goals = [v[:2] for v in packet["goals"]]
+    env.dollars = packet["dollars"]
+    env.rupees = packet["rupees"]

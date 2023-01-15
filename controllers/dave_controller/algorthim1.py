@@ -5,7 +5,7 @@ from Motion_Control_Class import Motion_Control
 from path_planning import Point_Follow, Point_Follow_States, Topological_Map,\
     find_best_path_possible, transform_node_list_to_point_follow_list, Dashability_Checker,\
     find_nearest_unvisited_cell, find_connectible_potins
-from wall_following import attempt2_left_wall_following, attempt2_right_wall_following, any_wall_detected
+from wall_following import attempt2_left_wall_following, attempt2_right_wall_following, any_wall_detected, left_front_wall_detected, right_front_wall_detected
 from enum import Enum
 import numpy as np
 from random import random
@@ -180,6 +180,10 @@ class Target_Reacher:
         #     row, column = self.current_topo_cell
         #     last_time = self.topo_map.visited_times[row][column]
         #     print(row, column, last_time, self.timer.get_time())
+        self.timer.tick()
+        self.funs_to_run[self.state]()
+        if(self.state == Target_Reacher_State.PATH_FOLLOWING):
+            return
         if(new_topo_cell != self.current_topo_cell or self.current_topo_cell is None):
             self.current_topo_cell = new_topo_cell
             row, column = self.current_topo_cell
@@ -188,26 +192,31 @@ class Target_Reacher:
 
             if (last_time > self.start_time):
                 if (new_time - last_time) > self.LOOP_THRESHOLD:
-                    print("loop->stuck")
+                    # print("loop->stuck")
+                    # self.i_am_super_stuck()
+                    # return
                     # self.state = Target_Reacher_State.STUCK
+                    pass
             self.topo_map.visited_times[row][column] = new_time
         else:
             # print("still in the same cell")
             row, column = self.current_topo_cell
             last_time = self.topo_map.visited_times[row][column]
-            if(self.timer.get_time()-last_time) > self.STUCK_THRESHOLD:
-                # print(last_time, self.timer.get_time())
-                # print("stuck")
-                if(self.state == Target_Reacher_State.ESCAPE_PATH):
-                    self.state = Target_Reacher_State.SUPER_STUCK
+            if(last_time > self.start_time):
+
+                if(self.timer.get_time()-last_time) > self.STUCK_THRESHOLD:
+                    print(last_time, self.timer.get_time())
+                    # print("stuck")
+                    # if(self.state == Target_Reacher_State.ESCAPE_PATH):
+                    #     self.state = Target_Reacher_State.SUPER_STUCK
+                    #     return
+                    self.i_am_super_stuck()
                     return
 
-                self.state = Target_Reacher_State.STUCK
+                    self.state = Target_Reacher_State.STUCK
 
         if(self.state == Target_Reacher_State.FINISHED):
             return
-        self.timer.tick()
-        self.funs_to_run[self.state]()
 
     def is_super_stuck(self):
         return (self.state == Target_Reacher_State.SUPER_STUCK)
@@ -235,17 +244,21 @@ class Target_Reacher:
             self.i_am_super_stuck()
             return
         path = find_best_path_possible(
-            self.topo_map, (self.dave.x, self.dave.y), connectible_points[1])
+            self.topo_map, (self.dave.x, self.dave.y), (-1.929, -0.173))
         if(path is None):
             self.i_am_super_stuck()
-            return
             # raise Exception("No path found")
+            return
+
             # print(self.topo_map.topo_grid[parent[0]][parent[1]])
         self.state = Target_Reacher_State.ESCAPE_PATH
         escape_path = transform_node_list_to_point_follow_list(path)
+        escape_path.append(connectible_points[1])
         escape_path.append(connectible_points[2])
         self.point_follow.terminate_current_run_and_set_path(escape_path)
         self.point_follow.start_current_path()
+        print(unvisited, parent, self.topo_map.cartesian_to_grid(
+            self.dave.x, self.dave.y))
 
     def on_escape_path(self):
         if(self.point_follow.state == Point_Follow_States.FINISHED):
@@ -255,7 +268,24 @@ class Target_Reacher:
             else:
                 self.set_target_and_reset(target)
             return
+        print("on escapep path")
+
+        # if(any_wall_detected(self.dave)):
+        #     # print("walls detected")
+        #     # self.on_stuck()
+        #     return
+
+        #     self.state = Target_Reacher_State.DASHING
+        #     return
+        # self.on_stuck()
         self.point_follow.run(self.dave)
+
+
+GOAL = 0
+COLLECTIBLE = 1
+
+
+MAX_RUPEES_LIMIT = 3000
 
 
 class Supermachine:
@@ -265,16 +295,49 @@ class Supermachine:
         self.timer = Timer()
         self.env = env
         self.current_target = None
+        self.ss = None
+        self.target_type = COLLECTIBLE
+        self.previous_rupees = 0
+        self.previous_dollars = 0
+
+    def get_closest(self, targets: List[Tuple[float, float]]):
+        return min(targets,
+                   key=lambda target: (
+                       target[0]-self.dave.x)**2 + (target[1]-self.dave.y)**2
+                   )
 
     def check_and_set_targets(self):
-        if(self.current_target is None or self.current_target not in self.env.collectibles):
-            self.current_target = self.env.collectibles[0]
-            self.target_reacher.set_target_and_reset(self.current_target)
-            print(f"New target given {self.current_target}")
+        state_change = False
+        if(self.current_target is None):
+            state_change = True
+        elif(self.previous_dollars != self.env.dollars):
+            state_change = True
+        elif(self.previous_rupees != self.env.rupees):
+            state_change = True
+
+        if(not state_change):
+            return
+
+        if(self.env.rupees < MAX_RUPEES_LIMIT):
+            self.target_type = COLLECTIBLE
+        else:
+            self.target_type = GOAL
+
+        if(self.target_type == GOAL):
+            self.current_target = self.get_closest(self.env.goals)
+        else:
+            self.current_target = self.get_closest(self.env.collectibles)
+
+        self.target_reacher.set_target_and_reset(self.current_target)
+        self.previous_dollars = self.env.dollars
+        self.previous_rupees = self.env.rupees
 
     def run_target_reacher(self, stuck_evasion_reverse_time: int):
         if(self.current_target is None):
             return
+        if(self.ss != self.target_reacher.state):
+            self.ss = self.target_reacher.state
+            print(self.ss)
 
         if(self.target_reacher.is_super_stuck()):
             v = -1.0

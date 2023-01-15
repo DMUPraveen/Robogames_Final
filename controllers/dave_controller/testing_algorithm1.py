@@ -77,7 +77,7 @@ def main():
     reachability_checker = Reachability_Checker(
         occupancy_grid, cart_to_grid_pos_converter)
     topo_map = Topological_Map(
-        5.0, 5.0, 0.1, 0.03, 5, reachability_checker, 0.01)
+        5.0, 5.0, 0.2, 0.01, 2, reachability_checker, 0.01)
 
     dashability_checker = Dashability_Checker(
         occupancy_grid, cart_to_grid_pos_converter)
@@ -107,6 +107,8 @@ def main():
         vis.run(all_visualizations)
         supermachine.run_target_reacher(100)
         supermachine.check_and_set_targets()
+        topo_map.construct_topo_map(dave)
+        # print(dave.wall_dis)
         # print(point_follower.state)
         # print(dave)
         # control_dave_via_keyboard(res.keyboard, dave)
