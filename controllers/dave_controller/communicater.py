@@ -36,10 +36,18 @@ def positionofwalls(prox_sensors):
     return list(map(transform_sensor_reading, (sensor.getValue() for sensor in prox_sensors)))
 
 
+MAX_VELOCITY = 6
+
+
 def update_epuck(dave: Dave, res: res_man):
     '''
     Transfers data from dave object to epuck
     '''
+
+    if(abs(dave.left_v) > MAX_VELOCITY):
+        dave.left_v = dave.left_v/abs(dave.left_v)*MAX_VELOCITY
+    if(abs(dave.right_v) > MAX_VELOCITY):
+        dave.right_v = dave.left_v/abs(dave.right_v)*MAX_VELOCITY
     res.left.setVelocity(dave.left_v)
     res.right.setVelocity(dave.right_v)
     dave.wall_dis = positionofwalls(res.prox_sensors)

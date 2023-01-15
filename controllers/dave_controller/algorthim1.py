@@ -109,8 +109,10 @@ class Target_Reacher:
         self.point_follow.start_current_path()
 
     def path_following(self):
+        print("following")
         self.point_follow.run(self.dave)
         if(self.point_follow.state == Point_Follow_States.FINISHED):
+            print("finished")
             self.go_to_dashing()
 
     def go_to_wall_following(self):
@@ -172,6 +174,7 @@ class Target_Reacher:
     STUCK_THRESHOLD = 300
 
     def run(self):
+        print(self.state)
         if(self.state == Target_Reacher_State.SUPER_STUCK):
             return
         new_topo_cell = self.topo_map.cartesian_to_grid(
@@ -222,6 +225,7 @@ class Target_Reacher:
         return (self.state == Target_Reacher_State.SUPER_STUCK)
 
     def i_am_super_stuck(self):
+        print("super stuck")
         self.state = Target_Reacher_State.SUPER_STUCK
 
     def on_stuck(self):
@@ -318,7 +322,7 @@ class Supermachine:
         if(not state_change):
             return
 
-        if(self.env.rupees < MAX_RUPEES_LIMIT):
+        if(self.env.rupees == 0):
             self.target_type = COLLECTIBLE
         else:
             self.target_type = GOAL

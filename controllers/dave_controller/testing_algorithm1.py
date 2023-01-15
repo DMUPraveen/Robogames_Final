@@ -77,7 +77,7 @@ def main():
     reachability_checker = Reachability_Checker(
         occupancy_grid, cart_to_grid_pos_converter)
     topo_map = Topological_Map(
-        5.0, 5.0, 0.2, 0.01, 2, reachability_checker, 0.01)
+        10.0, 10.0, 0.2, 0.01, 2, reachability_checker, 0.01)
 
     dashability_checker = Dashability_Checker(
         occupancy_grid, cart_to_grid_pos_converter)
