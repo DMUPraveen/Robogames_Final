@@ -58,6 +58,8 @@ class Occupancy_Grid:
         self.grid[row, column] = self.OBSTACLE
 
     def set_visited(self, row, column):
+        if(self.grid[row, column] != 0):
+            return
         # print(f"visited @{row,column}")
         self.grid[row, column] = self.CELL_VISITED
 

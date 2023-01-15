@@ -1,4 +1,4 @@
-from testing_path_planning import main
+from testing_algorithm1 import main
 
 if __name__ == "__main__":
     main()

@@ -95,6 +95,10 @@ LEFT_FRONT_WALL_DETECTION_THRESHOLD = 0.02
 RIGHT_FRONT_WALL_DETECTION_THRESHOLD = 0.02
 
 
+def any_wall_detected(dave: Dave):
+    return any(wall < LEFT_FRONT_WALL_DETECTION_THRESHOLD for wall in dave.wall_dis)
+
+
 def left_front_wall_detected(dave: Dave):
     if dave.wall_dis[7] <= LEFT_FRONT_WALL_DETECTION_THRESHOLD:
         return True

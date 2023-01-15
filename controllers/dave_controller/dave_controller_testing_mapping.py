@@ -74,5 +74,5 @@ def main():
         mapper.mapping_with_dda(dave)
         vis.run(all_visualizations)
         # print(dave.get_distances()[0])
-        # print(dave)
+        print(dave)
     ######################################################################################

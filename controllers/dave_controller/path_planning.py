@@ -387,8 +387,8 @@ class Dashability_Checker:
         if(self.occupancy_grid.grid[row, column] == self.occupancy_grid.OBSTACLE):
             self.obstalce_detected = True
             return True
-        if(self.occupancy_grid.grid[row, column] != self.occupancy_grid.CELL_VISITED):
-            return True
+        # if(self.occupancy_grid.grid[row, column] != self.occupancy_grid.CELL_VISITED):
+        #     return True
         if not(0 <= row < self.occupancy_grid.height and 0 <= column < self.occupancy_grid.width):
             # print("aborting because out of depth")
             return True

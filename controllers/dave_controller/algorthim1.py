@@ -3,7 +3,7 @@ from dave_lib import Dave, update_dave_pose, update_environment, Environment
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_with_maximum_free_distance
 from Motion_Control_Class import Motion_Control
 from path_planning import Point_Follow, Point_Follow_States, Topological_Map, Reachability_Checker, find_best_path_possible, transform_node_list_to_point_follow_list, Dashability_Checker
-from wall_following import attempt2_left_wall_following, attempt2_right_wall_following
+from wall_following import attempt2_left_wall_following, attempt2_right_wall_following, any_wall_detected
 from enum import Enum
 import numpy as np
 
@@ -59,6 +59,7 @@ class Target_Reacher:
             self.reset()
             return
         self.motion_controller.set_target(self.target[0], self.target[1])
+        self.state = Target_Reacher_State.DASHING
 
     def on_find_path(self):
         if(self.target is None):
@@ -89,6 +90,8 @@ class Target_Reacher:
         if(self.target is None):
             self.reset()
             return
+        if not(any_wall_detected(self.dave)):
+            return
         front_vector = self.dave.get_front_facing_vector().flatten()
         target_vector = np.array(self.target) - \
             np.array((self.dave.x, self.dave.y))  # type: ignore
@@ -108,6 +111,7 @@ class Target_Reacher:
             self.dave.x, self.dave.y,
             self.target[0], self.target[1]
         )
+
         if(not can_dash):
             self.go_to_wall_following()
 

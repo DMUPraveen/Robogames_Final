@@ -25,7 +25,7 @@ def main():
     cart_to_grid_pos_converter = Cartesian_to_Grid(
         OCCUPANCY_GRID_SCALE, OCCUPANCY_GRID_WIDTH//2, OCCUPANCY_GRID_HEIGHT//2)
     obstacle_cell_determiner = get_true_distance_with_maximum_free_distance(
-        0.06, 0.04)
+        0.06, 0.02)
     mapper = Mapper(occupancy_grid, cart_to_grid_pos_converter,
                     obstacle_cell_determiner, 0.001)
     motion_controller = Motion_Control(res.timestep)
@@ -88,7 +88,7 @@ def main():
         motion_controller,
         point_follower,
     )
-    target_reacher.set_target_and_reset((-1.431, -1.498))
+    target_reacher.set_target_and_reset((-0.939, 0.297))
     ######################################################################################
 
     ############################## Main Loop #############################################
@@ -101,6 +101,7 @@ def main():
         vis.run(all_visualizations)
         # print(point_follower.state)
         target_reacher.run()
+        print(target_reacher.state)
         topo_map.construct_topo_map(dave)
         # print(dave)
         # control_dave_via_keyboard(res.keyboard, dave)
