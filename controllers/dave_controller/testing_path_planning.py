@@ -8,7 +8,7 @@ from remote_control import control_dave_via_keyboard, actions
 from New_graphic_Engine import Graphic_Engine, draw_dave, draw_grid_view, tracking_grid_view
 from Occupancy_grid import Occupancy_Grid, Cartesian_to_Grid, Mapper, get_true_distance_with_maximum_free_distance
 from Motion_Control_Class import Motion_Control
-from path_planning import Point_Follow, Point_Follow_States, Topological_Map, Reachability_Checker
+from path_planning import Point_Follow, Point_Follow_States, Topological_Map, Reachability_Checker, find_best_path_possible, transform_node_list_to_point_follow_list
 
 
 def main():
@@ -104,9 +104,23 @@ def main():
         point_follower.run(dave)
         # print(dave)
         if(point_follower.state == Point_Follow_States.FINISHED):
-            test_path = list(reversed(test_path))
-            point_follower.terminate_current_run_and_set_path(test_path)
-            point_follower.start_current_path()
+            target_position = (-1.929, -0.173)
+            path = find_best_path_possible(
+                topo_map,
+                (dave.x, dave.y),
+                target_position
+            )
+            if(path is None):
+                print("Something went wrong")
+                point_follower.state = Point_Follow_States.IDLE
+            else:
+                for node in path:
+                    print(node)
+                point_follower.terminate_current_run_and_set_path(
+                    transform_node_list_to_point_follow_list(path)
+                )
+                point_follower.start_current_path()
+
         topo_map.construct_topo_map(dave)
         # print(dave)
         # control_dave_via_keyboard(res.keyboard, dave)

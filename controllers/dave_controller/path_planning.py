@@ -1,4 +1,4 @@
-from typing import Iterable, List, Tuple, Deque, Set
+from typing import Iterable, List, Tuple, Deque, Set, Dict, Optional
 from dave_lib import Dave
 from Motion_Control_Class import Motion_Control
 from enum import Enum
@@ -6,6 +6,7 @@ from collections import deque
 from Occupancy_grid import Cartesian_to_Grid, Occupancy_Grid, flat_array_to_column_vector
 from dda_algo import perform_dda
 import numpy as np
+from queue import Queue
 
 
 class Point_Follow_States(Enum):
@@ -143,6 +144,9 @@ class TopoNode:
 
     def __repr__(self):
         return self.__str__()
+
+    def __eq__(self, __o: 'TopoNode') -> bool:
+        return (self.index == __o.index)
 
 
 def calculate_distance_between_nodes_in_meters(node1: TopoNode, node2: TopoNode):
@@ -284,8 +288,8 @@ class Topological_Map:
                 if(our_node.is_connected(other_node)):
                     continue
                 if not(self.can_connect(our_node, other_node, self.reachability_distance_threshold)):
-                    print(
-                        f"{our_node} and {other_node} could not be connected")
+                    # print(
+                    #     f"{our_node} and {other_node} could not be connected")
                     continue
 
                 our_node.conect_node(other_node)
@@ -302,11 +306,61 @@ class Topological_Map:
     def min_distance_key(node: TopoNode, x_pos: float, y_pos: float):
         return (node.position[0]-x_pos)**2+(node.position[1]-y_pos)**2
 
-    def find_closest_node(self, x_pos, y_pos):
+    def find_all_close_nodes(self, x_pos, y_pos):
         topo_cell = self.cartesian_to_grid(x_pos, y_pos)
         neighbouring_topo_cells = self.get_neighbouring_topo_cells(*topo_cell)
         neighbouring_topo_cells.append(topo_cell)
-        all_nodes = self.get_all_nodes_in_cells(neighbouring_topo_cells)
+        return self.get_all_nodes_in_cells(neighbouring_topo_cells)
+
+    def find_closest_node(self, x_pos: float, y_pos: float):
+        all_nodes = self.find_all_close_nodes(x_pos, y_pos)
         if(len(all_nodes) == 0):
             return None
         return min(all_nodes, key=lambda node: self.min_distance_key(node, x_pos, y_pos))
+
+
+def bfs_find(target_nodes: Iterable[TopoNode], start_node: TopoNode):
+    bfs_queue = Queue()
+    targets = set(target_nodes)
+    bfs_queue.put(start_node)
+    path = []
+    visited: Set[TopoNode] = set()
+    visited.add(start_node)
+    parent_node: Dict[TopoNode, Optional[TopoNode]] = {}
+    destintation = None
+    parent_node[start_node] = None
+    if(start_node in target_nodes):
+        return [start_node]
+    while(not bfs_queue.empty()):
+        node: TopoNode = bfs_queue.get()
+        for connection in node.connections:
+            if(connection in visited):
+                continue
+            visited.add(connection)
+            parent_node[connection] = node
+            bfs_queue.put(connection)
+            if(node in targets):
+                destintation = node
+                break
+    if(destintation is None):
+        return None
+    path = []
+    path_node = destintation
+    while(path_node is not None):
+        path.append(path_node)
+        path_node = parent_node[path_node]
+    return list(reversed(path))
+
+
+def find_best_path_possible(topo_map: Topological_Map, position_start: Tuple[float, float], position_target: Tuple[float, float]):
+    closest_node = topo_map.find_closest_node(*position_start)
+    if(closest_node is None):
+        return None
+    target_nodes = topo_map.find_all_close_nodes(*position_target)
+    # print(closest_node, target_nodes)
+    path = bfs_find(target_nodes, closest_node)
+    return path
+
+
+def transform_node_list_to_point_follow_list(path_list: List[TopoNode]):
+    return [node.position for node in path_list]
