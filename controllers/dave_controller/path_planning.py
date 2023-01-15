@@ -79,7 +79,6 @@ class Reachability_Checker:
         if(distance > 2*self.expected_distance):
             # print(distance, self.expected_distance)
             # print("aborting becuase max_distance exceeded")
-            raise Exception
             return True
         return False
 
@@ -364,3 +363,68 @@ def find_best_path_possible(topo_map: Topological_Map, position_start: Tuple[flo
 
 def transform_node_list_to_point_follow_list(path_list: List[TopoNode]):
     return [node.position for node in path_list]
+
+
+class Dashability_Checker:
+    def __init__(self, occupancy_grid: Occupancy_Grid, cart_to_grid: Cartesian_to_Grid):
+        self.occupancy_grid = occupancy_grid
+        self.on_visit = lambda x: None
+        self.cart_to_grid = cart_to_grid
+        self.destination = (0, 0)
+        self.obstalce_detected = False
+
+    def close_enough(self, index, other_index):
+        return abs(index-other_index) < 1
+
+    def stopping_condition_cheker(self, cell_index_tuple: Tuple[int, int], distance: float):
+        row, column = cell_index_tuple[1], cell_index_tuple[0]
+        # print(row, column, distance)
+        # self.not_visited_count += int(
+        #     self.occupancy_grid.grid[row, column] != self.occupancy_grid.CELL_VISITED)
+        # print(self.destination, row, column)
+        # if(self.occupancy_grid.grid[row, column] != self.occupancy_grid.CELL_VISITED):
+        #     return True
+        if(self.occupancy_grid.grid[row, column] == self.occupancy_grid.OBSTACLE):
+            self.obstalce_detected = True
+            return True
+        if(self.occupancy_grid.grid[row, column] != self.occupancy_grid.CELL_VISITED):
+            return True
+        if not(0 <= row < self.occupancy_grid.height and 0 <= column < self.occupancy_grid.width):
+            # print("aborting because out of depth")
+            return True
+        if(self.close_enough(row, self.destination[0]) and self.close_enough(column, self.destination[1])):
+            # print("abroting because it has been found!")
+            return True
+        if(distance > 2*self.expected_distance):
+            # print(distance, self.expected_distance)
+            # print("aborting becuase max_distance exceeded")
+            return True
+        return False
+
+    def check_dashability(self, start_x_pos: float, start_y_pos: float, end_x_pos: float, end_y_pos: float):
+        self.obstalce_detected = False
+        self.destination = self.cart_to_grid(end_x_pos, end_y_pos)
+        scaled_start_x_pos, scaled_start_y_pos = self.cart_to_grid.scale_xy_to_grid_scale(
+            start_x_pos, start_y_pos)
+
+        scaled_end_x_pos, scaled_end_y_pos = self.cart_to_grid.scale_xy_to_grid_scale(
+            end_x_pos, end_y_pos)
+        direction = (
+            scaled_end_x_pos - scaled_start_x_pos,
+            scaled_end_y_pos - scaled_start_y_pos
+        )
+
+        # print(scaled_start_x_pos, scaled_start_y_pos)
+        # print(scaled_end_x_pos, scaled_end_y_pos)
+        # print(f"{direction=}")
+        self.expected_distance = np.linalg.norm(direction)
+        scaled_starting_point = (scaled_start_x_pos, scaled_start_y_pos)
+        return_cell, distance = perform_dda(
+            direction,
+            scaled_starting_point,
+            self.stopping_condition_cheker,
+            self.on_visit,
+        )
+        if(self.obstalce_detected):
+            return False
+        return True
