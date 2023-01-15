@@ -222,10 +222,10 @@ class Target_Reacher:
 
             if (last_time > self.start_time):
                 if (new_time - last_time) > self.LOOP_THRESHOLD:
-                    print("loop->stuck")
+                    # print("loop->stuck")
                     # self.i_am_super_stuck()
                     # return
-                    self.state = Target_Reacher_State.STUCK
+                    # self.state = Target_Reacher_State.STUCK
                     pass
             self.topo_map.visited_times[row][column] = new_time
         else:
